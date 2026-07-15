@@ -1,9 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Daisy</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daisy's Dashboard</title>
+  <meta
+    name="description"
+    content="A tiny Phaser-powered fetch game starring Daisy."
+  />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <h1>Hi. I'm Daisy.</h1>
+  <main class="page-shell">
+    <div class="stars stars-far" aria-hidden="true"></div>
+    <div class="stars stars-near" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span>DAISY_OS</span>
+        <span class="muted">/</span>
+        <span class="online">FETCH MODE</span>
+      </div>
+      <nav aria-label="Daisy game sections">
+        <a href="#game-panel">Game</a>
+        <a href="#dashboard">Stats</a>
+        <a href="https://github.com/mikedunlap1/daisy">GitHub</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="title">
+      <div>
+        <p class="kicker">Tiny Phaser Game Prototype</p>
+        <h1 id="title">Daisy's Dashboard</h1>
+        <p id="status-copy">
+          Daisy is tiny, locked in, and waiting for the throw.
+        </p>
+      </div>
+      <aside class="system-card" aria-label="Current run status">
+        <span class="label">Run State</span>
+        <strong id="run-state">Ready</strong>
+        <span id="hint">Press Space or throw the ball.</span>
+      </aside>
+    </section>
+
+    <section class="game-layout">
+      <article class="game-panel" id="game-panel">
+        <div class="panel-topline">
+          <span>Daisy Fetch Engine</span>
+          <span>PHASER 3</span>
+        </div>
+        <div id="game" class="game-canvas" aria-label="Daisy fetch game canvas"></div>
+        <div class="controls" aria-label="Game controls">
+          <button id="throw-button" type="button">Throw Ball</button>
+          <button id="rest-button" type="button">Rest Daisy</button>
+          <button id="reset-button" type="button">Reset Run</button>
+        </div>
+      </article>
+
+      <section class="dashboard-cards" id="dashboard" aria-label="Game dashboard">
+        <article class="metric-card draggable" data-card>
+          <span class="label">Score</span>
+          <strong id="score">0</strong>
+          <p>Every clean fetch adds points. Streaks add bonus.</p>
+        </article>
+
+        <article class="metric-card draggable" data-card>
+          <span class="label">Fetch Streak</span>
+          <strong id="streak">0</strong>
+          <p>Every third fetch earns Daisy a treat.</p>
+        </article>
+
+        <article class="metric-card draggable" data-card>
+          <span class="label">Energy</span>
+          <strong><span id="energy">100</span>%</strong>
+          <div class="meter" aria-hidden="true"><i id="energy-meter"></i></div>
+        </article>
+
+        <article class="metric-card draggable" data-card>
+          <span class="label">Treats</span>
+          <strong id="treats">3</strong>
+          <p>Treats are the official Daisy economy.</p>
+        </article>
+      </section>
+    </section>
+
+    <footer class="footer">
+      <span>System Status <b>Nominal</b></span>
+      <span>Move the stat cards by dragging them.</span>
+      <span>Daisy_OS v0.2</span>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js"></script>
+  <script type="module" src="game.js"></script>
 </body>
 </html>
