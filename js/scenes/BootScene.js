@@ -2,13 +2,30 @@ import { PARKS } from "../config/parks.js";
 
 const W = 1536;
 const H = 864;
-const FRAME_W = 190;
-const FRAME_H = 150;
+const FRAME_W = 192;
+const FRAME_H = 208;
 const DAISY_ROWS = ["idle", "walk", "run", "sprint", "pounce", "return", "shake", "tired-flop", "zoomies-vibrate", "sassy-idle"];
+const PET_ROWS = {
+  idle: 0,
+  walk: 1,
+  run: 1,
+  sprint: 1,
+  pounce: 4,
+  return: 8,
+  shake: 3,
+  "tired-flop": 5,
+  "zoomies-vibrate": 7,
+  "sassy-idle": 8
+};
 
 export class BootScene extends Phaser.Scene {
   constructor() {
     super("BootScene");
+  }
+
+  preload() {
+    this.load.image("backyard-171", "./assets/parks/backyard/171-backyard.png");
+    this.load.image("daisy-pet-source", "./assets/daisies/daisy-pet-sheet.png");
   }
 
   create() {
@@ -26,7 +43,7 @@ export class BootScene extends Phaser.Scene {
         canvas.width = W;
         canvas.height = H;
         const ctx = canvas.getContext("2d");
-        drawParkLayer(ctx, layer, park.previewColor, parkIndex);
+        drawParkLayer(ctx, layer, park.previewColor, parkIndex, this.textures.get("backyard-171")?.getSourceImage());
         this.textures.addCanvas(`park-${park.id}-${layer}`, canvas);
         if (parkIndex === 0) this.textures.addCanvas(`park-${layer}`, canvas);
       });
@@ -85,10 +102,11 @@ export class BootScene extends Phaser.Scene {
     canvas.width = FRAME_W * 8;
     canvas.height = FRAME_H * DAISY_ROWS.length;
     const ctx = canvas.getContext("2d");
+    const source = this.textures.get("daisy-pet-source").getSourceImage();
 
     DAISY_ROWS.forEach((animation, row) => {
       for (let frame = 0; frame < 8; frame += 1) {
-        drawDaisyFrame(ctx, frame * FRAME_W, row * FRAME_H, animation, frame);
+        drawPetDaisyFrame(ctx, source, frame * FRAME_W, row * FRAME_H, animation, frame);
       }
     });
 
@@ -130,8 +148,37 @@ export class BootScene extends Phaser.Scene {
   }
 }
 
-function drawParkLayer(ctx, layer, skyTop, seed) {
+function drawParkLayer(ctx, layer, skyTop, seed, backyardImage) {
   ctx.clearRect(0, 0, W, H);
+  if (backyardImage && layer === "sky") {
+    const scale = Math.max(W / backyardImage.width, H / backyardImage.height);
+    const drawW = backyardImage.width * scale;
+    const drawH = backyardImage.height * scale;
+    const dx = (W - drawW) / 2;
+    const dy = (H - drawH) / 2;
+    ctx.drawImage(backyardImage, dx, dy, drawW, drawH);
+    ctx.fillStyle = "rgba(255, 174, 77, .12)";
+    ctx.fillRect(0, 0, W, H);
+    return;
+  }
+
+  if (backyardImage && layer === "near") {
+    ctx.fillStyle = "rgba(29, 43, 23, .18)";
+    ctx.fillRect(0, 610, W, H - 610);
+    ctx.fillStyle = "rgba(255, 210, 89, .14)";
+    for (let x = -120; x < W + 120; x += 180) fillEllipse(ctx, x + seed * 18, 715 + Math.sin(x) * 18, 140, 26);
+    return;
+  }
+
+  if (backyardImage && layer === "foreground") {
+    ctx.fillStyle = "rgba(20, 27, 18, .24)";
+    ctx.fillRect(0, 808, W, 56);
+    grass(ctx, 700, 850, 280, seed + 8);
+    return;
+  }
+
+  if (backyardImage) return;
+
   if (layer === "sky") {
     const gradient = ctx.createLinearGradient(0, 0, 0, H);
     gradient.addColorStop(0, "#8ed7ff");
@@ -199,6 +246,34 @@ function drawParkLayer(ctx, layer, skyTop, seed) {
       line(ctx, x, y, x + Math.sin(i) * 20, y - 80 - (i % 40));
     }
   }
+}
+
+function drawPetDaisyFrame(ctx, source, ox, oy, animation, frame) {
+  const sourceRow = PET_ROWS[animation] ?? 0;
+  const sourceFrame = Math.min(frame, animation === "idle" ? 5 : 7);
+  const sx = sourceFrame * FRAME_W;
+  const sy = sourceRow * FRAME_H;
+
+  ctx.save();
+  ctx.translate(ox, oy);
+  ctx.clearRect(0, 0, FRAME_W, FRAME_H);
+  ctx.drawImage(source, sx, sy, FRAME_W, FRAME_H, 0, 0, FRAME_W, FRAME_H);
+
+  if (["walk", "run", "sprint"].includes(animation)) {
+    ctx.clearRect(122, 82, 70, 76);
+    ctx.clearRect(0, 0, 26, FRAME_H);
+  }
+
+  if (animation === "return") {
+    ctx.clearRect(122, 82, 70, 76);
+  }
+
+  if (animation === "pounce") {
+    ctx.clearRect(0, 0, 36, FRAME_H);
+    ctx.clearRect(150, 0, 42, FRAME_H);
+  }
+
+  ctx.restore();
 }
 
 function drawDaisyFrame(ctx, ox, oy, animation, frame) {

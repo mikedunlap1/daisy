@@ -54,16 +54,16 @@ export const GAME = {
     lerp: 0.085,
     leadX: 170,
     leadY: 36,
-    zoomFast: 1.04,
-    zoomNormal: 1.1
+    zoomFast: 1.0,
+    zoomNormal: 1.04
   },
   controls: {
     touchStickRadius: 55,
     ignoreTopPixels: 92
   },
   render: {
-    daisyWidth: 168,
-    daisyHeight: 132,
+    daisyWidth: 124,
+    daisyHeight: 134,
     ballSize: 52
   },
   api: {

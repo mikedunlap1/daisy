@@ -7,11 +7,11 @@ export class DaisyController {
     this.stamina = 1;
     this.stopTimer = 0;
     this.carrying = false;
-    this.shadow = scene.add.ellipse(460, GAME.world.groundY + 112, 104, 24, 0x102416, 0.24).setDepth(18);
+    this.shadow = scene.add.ellipse(460, GAME.world.groundY + 104, 82, 19, 0x102416, 0.28).setDepth(18);
     this.sprite = scene.physics.add.sprite(460, GAME.world.groundY + 68, "daisy", "idle_0.png");
     this.sprite.setDepth(20);
     this.sprite.setDisplaySize(GAME.render.daisyWidth, GAME.render.daisyHeight);
-    this.sprite.body.setSize(82, 52).setOffset(54, 76);
+    this.sprite.body.setSize(82, 52).setOffset(54, 120);
     this.sprite.body.setCollideWorldBounds(true);
     this.sprite.body.setMaxVelocity(GAME.daisy.baseSpeed * 1.4);
     this.sprite.play(variant.idleAnimation || "idle");
@@ -61,7 +61,7 @@ export class DaisyController {
 
   updateShadow() {
     this.shadow.x = this.sprite.x - (this.sprite.flipX ? -12 : 12);
-    this.shadow.y = this.sprite.y + 48;
+    this.shadow.y = this.sprite.y + 54;
     this.shadow.setDepth(this.sprite.depth - 1);
     this.shadow.scaleX = Phaser.Math.Clamp(0.9 + this.sprite.body.speed / 900, 0.9, 1.22);
     this.shadow.alpha = Phaser.Math.Clamp(0.22 + this.sprite.body.speed / 2200, 0.22, 0.34);

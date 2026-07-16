@@ -38,14 +38,18 @@
 
 .card-sprite {
   display: block;
-  width: 150px;
-  height: 96px;
+  width: 96px;
+  height: 104px;
   margin-bottom: 8px;
 }
 
 .css-daisy {
   position: relative;
   overflow: visible;
+  background-image: url("../assets/daisies/daisy-pet-sheet.png");
+  background-position: 0 0;
+  background-size: 768px 936px;
+  background-repeat: no-repeat;
   filter: drop-shadow(0 10px 8px rgba(37, 49, 30, .18));
 }
 
@@ -57,7 +61,7 @@
   width: 94px;
   height: 42px;
   border-radius: 50%;
-  display: block;
+  display: none;
   background: radial-gradient(circle at 42% 44%, #f2f0de 0 21%, transparent 22%), #151818;
   box-shadow:
     68px -23px 0 -10px #151818,
@@ -73,7 +77,7 @@
   width: 50px;
   height: 64px;
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  display: block;
+  display: none;
   background: linear-gradient(90deg, #151818 0 35%, #f2f0de 36% 70%, #151818 71%);
   transform: rotate(6deg);
 }
