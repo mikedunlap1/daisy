@@ -3,8 +3,8 @@ export const GAME = {
     width: 3600,
     height: 900,
     groundY: 610,
-    floorMinY: 560,
-    floorMaxY: 780
+    floorMinY: 590,
+    floorMaxY: 790
   },
   daisy: {
     baseSpeed: 385,
@@ -54,16 +54,16 @@ export const GAME = {
     lerp: 0.085,
     leadX: 170,
     leadY: 36,
-    zoomFast: 0.985,
-    zoomNormal: 1.04
+    zoomFast: 1.04,
+    zoomNormal: 1.1
   },
   controls: {
     touchStickRadius: 55,
     ignoreTopPixels: 92
   },
   render: {
-    daisyWidth: 238,
-    daisyHeight: 258,
+    daisyWidth: 168,
+    daisyHeight: 132,
     ballSize: 52
   },
   api: {

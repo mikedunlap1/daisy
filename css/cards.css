@@ -38,40 +38,42 @@
 
 .card-sprite {
   display: block;
-  width: 112px;
-  height: 90px;
+  width: 150px;
+  height: 96px;
+  margin-bottom: 8px;
 }
 
 .css-daisy {
   position: relative;
-  background-image: url("../assets/daisies/daisy-pet-sheet.png");
-  background-position: 0 0;
-  background-size: 896px 1092px;
-  background-repeat: no-repeat;
+  overflow: visible;
+  filter: drop-shadow(0 10px 8px rgba(37, 49, 30, .18));
 }
 
 .css-daisy::before {
   content: "";
   position: absolute;
   left: 12px;
-  top: 30px;
-  width: 70px;
-  height: 34px;
+  top: 44px;
+  width: 94px;
+  height: 42px;
   border-radius: 50%;
-  display: none;
-  background: radial-gradient(circle at 35% 42%, #f2f0de 0 18%, transparent 19%), #151818;
-  box-shadow: 46px -14px 0 -7px #151818, 56px -5px 0 -12px #f2f0de;
+  display: block;
+  background: radial-gradient(circle at 42% 44%, #f2f0de 0 21%, transparent 22%), #151818;
+  box-shadow:
+    68px -23px 0 -10px #151818,
+    81px -13px 0 -18px #f2f0de,
+    -8px 8px 0 -4px #f2f0de;
 }
 
 .css-daisy::after {
   content: "";
   position: absolute;
-  left: 73px;
-  top: 10px;
-  width: 35px;
-  height: 43px;
+  left: 94px;
+  top: 11px;
+  width: 50px;
+  height: 64px;
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  display: none;
+  display: block;
   background: linear-gradient(90deg, #151818 0 35%, #f2f0de 36% 70%, #151818 71%);
   transform: rotate(6deg);
 }
