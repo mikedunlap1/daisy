@@ -1,0 +1,53 @@
+.touch-stick {
+  position: absolute;
+  left: max(18px, env(safe-area-inset-left));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 4;
+  display: none;
+  width: 112px;
+  height: 112px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 50%;
+  background: rgba(24, 32, 28, 0.18);
+  backdrop-filter: blur(8px);
+}
+
+.touch-stick.is-active {
+  display: block;
+}
+
+.touch-stick__nub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  transform: translate(-50%, -50%);
+}
+
+.mute-toggle {
+  position: absolute;
+  right: max(12px, env(safe-area-inset-right));
+  bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 5;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 8px;
+  background: rgba(33, 43, 34, 0.48);
+  color: white;
+  font-weight: 800;
+}
+
+.score-panel {
+  inset: auto clamp(12px, 2vw, 28px) clamp(18px, 3vw, 36px);
+  max-width: 560px;
+}
+
+.score-big {
+  margin: 12px 0;
+  font-size: clamp(34px, 7vw, 66px);
+  font-weight: 950;
+  line-height: 1;
+}
