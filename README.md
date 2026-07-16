@@ -1,60 +1,121 @@
-import { GAME } from "../config/game.js";
+# Daisy Ball Chase
 
-export class InputSystem {
-  constructor() {
-    this.vector = new Phaser.Math.Vector2(0, 0);
-    this.keys = null;
-    this.pointerId = null;
-    this.origin = { x: 0, y: 0 };
-    this.nub = document.querySelector(".touch-stick__nub");
-    this.stick = document.querySelector("#touch-stick");
-  }
+A static Phaser 3 arcade game where Daisy steers into chaotic tennis balls launched by an off-screen blue Chuckit.
 
-  attach(scene) {
-    this.keys = scene.input.keyboard.addKeys({
-      up: "UP",
-      down: "DOWN",
-      left: "LEFT",
-      right: "RIGHT",
-      w: "W",
-      a: "A",
-      s: "S",
-      d: "D"
-    });
+## Run Locally
 
-    scene.input.on("pointerdown", (pointer) => {
-      if (pointer.y < GAME.controls.ignoreTopPixels) return;
-      this.pointerId = pointer.id;
-      this.origin = { x: pointer.x, y: pointer.y };
-      this.stick?.classList.add("is-active");
-      this.stick?.style.setProperty("left", `${Math.max(18, pointer.x - 56)}px`);
-      this.stick?.style.setProperty("bottom", `${Math.max(18, window.innerHeight - pointer.y - 56)}px`);
-    });
+Serve the folder with any static server:
 
-    scene.input.on("pointermove", (pointer) => {
-      if (pointer.id !== this.pointerId) return;
-      const radius = GAME.controls.touchStickRadius;
-      const dx = Phaser.Math.Clamp(pointer.x - this.origin.x, -radius, radius);
-      const dy = Phaser.Math.Clamp(pointer.y - this.origin.y, -radius, radius);
-      this.vector.set(dx / radius, dy / radius);
-      if (this.vector.length() > 1) this.vector.normalize();
-      this.nub?.style.setProperty("transform", `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`);
-    });
+```bash
+python3 -m http.server 4173
+```
 
-    scene.input.on("pointerup", (pointer) => {
-      if (pointer.id !== this.pointerId) return;
-      this.pointerId = null;
-      this.vector.set(0, 0);
-      this.nub?.style.setProperty("transform", "translate(-50%, -50%)");
-      this.stick?.classList.remove("is-active");
-    });
-  }
+Then open `http://localhost:4173`.
 
-  getVector() {
-    const x = (this.keys.left.isDown || this.keys.a.isDown ? -1 : 0) + (this.keys.right.isDown || this.keys.d.isDown ? 1 : 0);
-    const y = (this.keys.up.isDown || this.keys.w.isDown ? -1 : 0) + (this.keys.down.isDown || this.keys.s.isDown ? 1 : 0);
-    const keyboard = new Phaser.Math.Vector2(x, y);
-    if (keyboard.lengthSq() > 0) return keyboard.normalize();
-    return this.vector.clone();
+## File Structure
+
+```text
+/index.html
+/css/
+/js/
+  main.js
+  scenes/
+  config/
+  systems/
+  data/api.js
+/assets/
+  daisies/
+  parks/
+  props/
+```
+
+`main.js` only boots Phaser and registers scenes. Game content lives in config files. Gameplay behavior lives in small systems.
+
+## Add a Daisy Variant
+
+Edit `js/config/daisies.js` and append a new object:
+
+```js
+{
+  id: "new-daisy",
+  name: "New Daisy",
+  blurb: "A very specific personality issue.",
+  stats: { speed: 1, acceleration: 1, turnRadius: 1, stamina: 1, focus: 1 },
+  sprite: "daisy",
+  idleAnimation: "sassy-idle"
+}
+```
+
+The start screen renders cards from this array automatically.
+
+## Add a Park
+
+Create a folder under `assets/parks/your-park/` with:
+
+```text
+sky.png
+far.png
+mid.png
+near.png
+ground.png
+foreground.png
+preview.png
+```
+
+Then append a park object in `js/config/parks.js`. The parallax system reads the layer map and parallax values from config.
+
+## Tune Physics
+
+Edit `js/config/game.js`.
+
+Useful knobs:
+
+- `ball.launchVelocityX`
+- `ball.gravity`
+- `ball.bounceDamping`
+- `ball.rollDrag`
+- `daisy.baseSpeed`
+- `daisy.baseAcceleration`
+- `camera.lerp`
+- `throws.maxActiveBalls`
+- `levels.roundSeconds`
+
+No gameplay tuning numbers should live inside scenes.
+
+## Wire n8n / Airtable
+
+All network access goes through `js/data/api.js`.
+
+Set `GAME.api.webhookUrl` in `js/config/game.js` to your n8n webhook URL. The browser never receives an Airtable key. If the webhook is empty or offline, the game keeps working and score submission fails silently with a console warning.
+
+Expected score payload shape:
+
+```json
+{
+  "type": "score_submit",
+  "payload": {
+    "player": { "id": "local-id", "name": "Michael", "authProvider": "local" },
+    "daisyId": "sassy",
+    "parkId": "north-park",
+    "score": 12,
+    "bestStreak": 5,
+    "endedAt": "2026-07-16T00:00:00.000Z"
   }
 }
+```
+
+## Deploy to Render
+
+Create a Render Static Site pointed at this repo/folder.
+
+- Build command: leave blank
+- Publish directory: `.`
+- No environment variables are required for the client
+
+## Assumptions and Pushbacks
+
+- I used generated first-pass art because the workspace only had the two reference images, not Daisy photos.
+- The two real parks are named North Park and South Park as placeholders. Swap names/assets in `parks.js` if you mean different parks.
+- Returning the ball is treated as a between-round animation idea, not the core loop. The core fun is steering Daisy into fast, bouncy balls.
+- Phaser Arcade Physics is enough here. Matter would only be justified for complex terrain collision, which this game does not need.
+- The current sprite sheet is intentionally simple and documented so it can be redrawn without changing game code.

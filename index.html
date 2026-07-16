@@ -1,69 +1,78 @@
-import { GAME } from "../config/game.js";
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Daisy Ball Chase</title>
+    <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/cards.css">
+    <link rel="stylesheet" href="./css/menu.css">
+    <link rel="stylesheet" href="./css/hud.css">
+    <link rel="stylesheet" href="./css/game-overlay.css">
+  </head>
+  <body>
+    <main id="app-shell">
+      <div id="game"></div>
 
-export class BallPhysicsSystem {
-  constructor(scene, group) {
-    this.scene = scene;
-    this.group = group;
-  }
+      <section id="menu-overlay" class="screen-panel is-active" aria-label="Game setup">
+        <div class="menu-copy">
+          <p class="eyebrow">Daisy's Dashboard presents</p>
+          <h1>Daisy Ball Chase</h1>
+          <p class="lede">Steer Daisy into chaotic tennis balls. Best score wins family bragging rights.</p>
+        </div>
 
-  launch({ x, y, vx, vy, level = 1 }) {
-    const shadow = this.scene.add.ellipse(x, GAME.world.groundY + 24, 42, 14, 0x102416, 0.26).setDepth(2);
-    const ball = this.scene.physics.add.sprite(x, y, "tennis-ball").setDepth(9);
-    ball.setDisplaySize(GAME.render.ballSize, GAME.render.ballSize);
-    ball.body.setAllowGravity(false);
-    ball.body.setCircle(40, 8, 8);
-    ball.data = {
-      height: 0,
-      zVelocity: vy,
-      spin: Phaser.Math.Between(-18, 18),
-      age: 0,
-      caught: false,
-      shadow,
-      level
-    };
-    ball.setVelocity(vx, Phaser.Math.Between(-70, 95));
-    this.group.add(ball);
-    return ball;
-  }
+        <label class="name-field">
+          <span>Your name</span>
+          <input id="player-name" type="text" autocomplete="nickname" maxlength="28" placeholder="Big Hoss">
+        </label>
 
-  update(delta, park) {
-    const dt = delta / 1000;
-    this.group.getChildren().forEach((ball) => {
-      const data = ball.data;
-      data.age += dt;
-      data.zVelocity += GAME.ball.gravity * dt;
-      data.height += data.zVelocity * dt;
+        <div class="picker-block">
+          <div class="picker-heading">
+            <h2>Pick your Daisy</h2>
+            <p>Same dog, very different life choices.</p>
+          </div>
+          <div id="daisy-cards" class="card-grid"></div>
+        </div>
 
-      if (data.height > 0) {
-        data.height = 0;
-        data.zVelocity *= -GAME.ball.bounceDamping;
-        ball.body.velocity.x *= GAME.ball.bounceHorizontalDamping;
-        ball.body.velocity.y *= GAME.ball.bounceHorizontalDamping;
-        if (Math.abs(data.zVelocity) < 120) data.zVelocity = 0;
+        <div class="picker-block">
+          <div class="picker-heading">
+            <h2>Pick your park</h2>
+            <p>Real enough to feel like Saturday.</p>
+          </div>
+          <div id="park-cards" class="card-grid park-grid"></div>
+        </div>
+
+        <button id="start-game" class="primary-action" type="button">Start Chasing</button>
+      </section>
+
+      <section id="score-overlay" class="screen-panel score-panel" aria-label="Round score">
+        <p class="eyebrow">Round complete</p>
+        <h2 id="score-title">Daisy Report</h2>
+        <div class="score-big"><span id="final-score">0</span> catches</div>
+        <p id="score-line">Daisy is considering whether this was worth getting up for.</p>
+        <button id="play-again" class="primary-action" type="button">Throw More</button>
+      </section>
+
+      <section id="hud" class="hud" aria-label="Game HUD">
+        <div><span>Score</span><strong id="hud-score">0</strong></div>
+        <div><span>Streak</span><strong id="hud-streak">0</strong></div>
+        <div><span>Time</span><strong id="hud-time">45</strong></div>
+        <div class="stamina-wrap"><span>Stamina</span><meter id="hud-stamina" min="0" max="1" value="1"></meter></div>
+      </section>
+
+      <div id="touch-stick" class="touch-stick" aria-hidden="true">
+        <div class="touch-stick__nub"></div>
+      </div>
+      <button id="mute-toggle" class="mute-toggle" type="button" aria-pressed="true">Muted</button>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+    <script>
+      if (!window.Phaser) {
+        document.write('<script src="./js/vendor/phaser.min.js"><\/script>');
       }
-
-      const rolling = data.height === 0 && data.zVelocity === 0;
-      if (rolling) {
-        ball.body.velocity.x *= GAME.ball.rollDrag * park.groundFriction;
-        ball.body.velocity.y *= GAME.ball.rollDrag * park.groundFriction;
-      }
-
-      data.spin *= GAME.ball.spinDecay;
-      ball.rotation += data.spin * dt;
-      ball.y += data.height * dt * 0.08;
-      ball.setScale(Phaser.Math.Clamp(0.43 + Math.abs(data.height) / 900, 0.38, 0.68));
-      ball.setDepth(10 + Math.floor(ball.y / 16));
-
-      data.shadow.x = ball.x;
-      data.shadow.y = ball.y + 24 - data.height * 0.08;
-      data.shadow.scaleX = Phaser.Math.Clamp(1 - Math.abs(data.height) / 900, 0.35, 1.1);
-      data.shadow.scaleY = data.shadow.scaleX;
-      data.shadow.alpha = Phaser.Math.Clamp(0.28 - Math.abs(data.height) / 1600, 0.08, 0.28);
-
-      if (data.age > GAME.ball.lifeSeconds || (rolling && ball.body.speed < GAME.ball.stopSpeed)) {
-        data.shadow.destroy();
-        ball.destroy();
-      }
-    });
-  }
-}
+    </script>
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>
