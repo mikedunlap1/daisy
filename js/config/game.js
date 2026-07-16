@@ -7,40 +7,40 @@ export const GAME = {
     floorMaxY: 780
   },
   daisy: {
-    baseSpeed: 330,
-    baseAcceleration: 980,
-    turnDrag: 0.88,
-    idleDrag: 0.93,
+    baseSpeed: 385,
+    baseAcceleration: 1320,
+    turnDrag: 0.91,
+    idleDrag: 0.9,
     sprintThreshold: 260,
-    catchRadius: 58,
+    catchRadius: 104,
     pounceRadius: 84,
-    staminaDrainMove: 0.115,
-    staminaDrainSprint: 0.17,
-    staminaRecovery: 0.055,
-    lowStaminaSpeed: 0.62,
-    tiredStopChancePerSecond: 0.13,
+    staminaDrainMove: 0.045,
+    staminaDrainSprint: 0.085,
+    staminaRecovery: 0.12,
+    lowStaminaSpeed: 0.74,
+    tiredStopChancePerSecond: 0.04,
     tiredStopSeconds: 0.8,
     catchAnimationMs: 260
   },
   ball: {
-    gravity: 1420,
-    launchVelocityX: 760,
-    launchVelocityY: -820,
-    minLaunchVelocityX: 540,
-    maxLaunchVelocityX: 1160,
-    minLaunchVelocityY: -980,
+    gravity: 1180,
+    launchVelocityX: 560,
+    launchVelocityY: -640,
+    minLaunchVelocityX: 430,
+    maxLaunchVelocityX: 720,
+    minLaunchVelocityY: -760,
     maxLaunchVelocityY: -520,
-    bounceDamping: 0.56,
-    bounceHorizontalDamping: 0.82,
-    rollDrag: 0.985,
-    stopSpeed: 38,
+    bounceDamping: 0.54,
+    bounceHorizontalDamping: 0.76,
+    rollDrag: 0.978,
+    stopSpeed: 28,
     spinDecay: 0.965,
-    lifeSeconds: 9.5
+    lifeSeconds: 8.5
   },
   throws: {
-    firstDelay: 900,
-    waveDelay: 1350,
-    maxActiveBalls: 4,
+    firstDelay: 650,
+    waveDelay: 1050,
+    maxActiveBalls: 1,
     chuckitVisibleMs: 520
   },
   levels: {
@@ -59,12 +59,12 @@ export const GAME = {
   },
   controls: {
     touchStickRadius: 55,
-    ignoreTopPixels: 120
+    ignoreTopPixels: 92
   },
   render: {
-    daisyWidth: 190,
-    daisyHeight: 152,
-    ballSize: 38
+    daisyWidth: 238,
+    daisyHeight: 258,
+    ballSize: 52
   },
   api: {
     webhookUrl: ""

@@ -7,11 +7,11 @@ export class BallPhysicsSystem {
   }
 
   launch({ x, y, vx, vy, level = 1 }) {
-    const shadow = this.scene.add.ellipse(x, GAME.world.groundY + 24, 42, 14, 0x102416, 0.26).setDepth(2);
+    const shadow = this.scene.add.ellipse(x, y + 24, 58, 18, 0x102416, 0.3).setDepth(8);
     const ball = this.scene.physics.add.sprite(x, y, "tennis-ball").setDepth(9);
     ball.setDisplaySize(GAME.render.ballSize, GAME.render.ballSize);
     ball.body.setAllowGravity(false);
-    ball.body.setCircle(40, 8, 8);
+    ball.body.setCircle(36, 12, 12);
     ball.data = {
       height: 0,
       zVelocity: vy,
@@ -19,9 +19,10 @@ export class BallPhysicsSystem {
       age: 0,
       caught: false,
       shadow,
+      baseY: y,
       level
     };
-    ball.setVelocity(vx, Phaser.Math.Between(-70, 95));
+    ball.setVelocity(vx, Phaser.Math.Between(-22, 44));
     this.group.add(ball);
     return ball;
   }
@@ -33,6 +34,7 @@ export class BallPhysicsSystem {
       data.age += dt;
       data.zVelocity += GAME.ball.gravity * dt;
       data.height += data.zVelocity * dt;
+      data.baseY += ball.body.velocity.y * dt;
 
       if (data.height > 0) {
         data.height = 0;
@@ -50,17 +52,19 @@ export class BallPhysicsSystem {
 
       data.spin *= GAME.ball.spinDecay;
       ball.rotation += data.spin * dt;
-      ball.y += data.height * dt * 0.08;
-      ball.setScale(Phaser.Math.Clamp(0.43 + Math.abs(data.height) / 900, 0.38, 0.68));
+      data.baseY = Phaser.Math.Clamp(data.baseY, GAME.world.floorMinY - 20, GAME.world.floorMaxY + 20);
+      ball.y = data.baseY + data.height * 0.22;
+      ball.setScale(Phaser.Math.Clamp(0.55 + Math.abs(data.height) / 1250, 0.5, 0.78));
       ball.setDepth(10 + Math.floor(ball.y / 16));
 
       data.shadow.x = ball.x;
-      data.shadow.y = ball.y + 24 - data.height * 0.08;
+      data.shadow.y = data.baseY + 28;
       data.shadow.scaleX = Phaser.Math.Clamp(1 - Math.abs(data.height) / 900, 0.35, 1.1);
       data.shadow.scaleY = data.shadow.scaleX;
       data.shadow.alpha = Phaser.Math.Clamp(0.28 - Math.abs(data.height) / 1600, 0.08, 0.28);
 
       if (data.age > GAME.ball.lifeSeconds || (rolling && ball.body.speed < GAME.ball.stopSpeed)) {
+        this.scene.scoreSystem?.miss();
         data.shadow.destroy();
         ball.destroy();
       }

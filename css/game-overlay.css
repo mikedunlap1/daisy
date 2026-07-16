@@ -10,6 +10,8 @@
   border-radius: 50%;
   background: rgba(24, 32, 28, 0.18);
   backdrop-filter: blur(8px);
+  touch-action: none;
+  user-select: none;
 }
 
 .touch-stick.is-active {
@@ -38,6 +40,7 @@
   background: rgba(33, 43, 34, 0.48);
   color: white;
   font-weight: 800;
+  touch-action: manipulation;
 }
 
 .score-panel {

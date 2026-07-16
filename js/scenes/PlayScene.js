@@ -35,6 +35,7 @@ export class PlayScene extends Phaser.Scene {
     this.scoreSystem = new ScoreSystem();
     this.roundMs = GAME.levels.roundSeconds * 1000;
     this.startedAt = this.time.now;
+    this.isEnding = false;
     this.throwSystem.reset(this.time.now);
 
     this.createLighting();
@@ -77,7 +78,37 @@ export class PlayScene extends Phaser.Scene {
     document.querySelector("#hud-stamina").value = this.daisy.stamina;
   }
 
+  showCatchFeedback(x, y) {
+    const ring = this.add.circle(x, y, 18, 0xbde841, 0).setStrokeStyle(5, 0xf8ffe0, 0.95).setDepth(100);
+    const label = this.add.text(x, y - 78, "+1", {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "36px",
+      fontStyle: "900",
+      color: "#ffffff",
+      stroke: "#244224",
+      strokeThickness: 6
+    }).setOrigin(0.5).setDepth(101);
+    this.tweens.add({
+      targets: ring,
+      radius: 86,
+      alpha: 0,
+      duration: 360,
+      ease: "Cubic.easeOut",
+      onComplete: () => ring.destroy()
+    });
+    this.tweens.add({
+      targets: label,
+      y: y - 122,
+      alpha: 0,
+      duration: 520,
+      ease: "Cubic.easeOut",
+      onComplete: () => label.destroy()
+    });
+  }
+
   endRound() {
+    if (this.isEnding) return;
+    this.isEnding = true;
     const payload = {
       player: this.dataFromMenu.player,
       daisyId: this.variant.id,

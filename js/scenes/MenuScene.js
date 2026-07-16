@@ -41,7 +41,7 @@ export class MenuScene extends Phaser.Scene {
 
     daisyCards.innerHTML = DAISIES.map((daisy) => `
       <button class="select-card" type="button" data-daisy-id="${daisy.id}">
-        <img class="card-sprite" src="./assets/daisies/daisy-sheet.png" alt="" style="object-position: left top;">
+        <span class="card-sprite css-daisy" aria-hidden="true"></span>
         <h3>${daisy.name}</h3>
         <p>${daisy.blurb}</p>
         <div class="stat-bars">
@@ -54,7 +54,7 @@ export class MenuScene extends Phaser.Scene {
 
     parkCards.innerHTML = PARKS.map((park) => `
       <button class="select-card" type="button" data-park-id="${park.id}">
-        <img class="park-thumb" src="${park.preview}" alt="">
+        <span class="park-thumb" style="--park-preview:${park.previewColor}"></span>
         <h3>${park.name}</h3>
         <p>${park.blurb}</p>
       </button>

@@ -1,23 +1,20 @@
 # Daisy Sprite Sheet Layout
 
-File: `daisy-sheet.png`  
-Atlas: `daisy-atlas.json`  
-Frame size: `160 x 128`  
-Grid: `8 columns x 10 rows`
+Current game file: `daisy-pet-sheet.png`  
+Legacy atlas file: `daisy-sheet.png` / `daisy-atlas.json`  
+Current frame size: `192 x 208`  
+Current grid: `8 columns x 9 rows`
 
-Each frame is named in the atlas as `<animation>_<frame>.png`.
+The current pet sheet is loaded as a Phaser spritesheet and mapped to the gameplay animation names in `BootScene.js`.
 
 | Row | Animation | Frames | Notes |
 | --- | --- | ---: | --- |
 | 0 | `idle` | 0-5 | Neutral standing loop |
-| 1 | `walk` | 0-7 | Low-speed movement |
-| 2 | `run` | 0-7 | Normal chase |
-| 3 | `sprint` | 0-7 | High-speed chase |
-| 4 | `pounce` | 0-5 | Catch animation, non-looping |
-| 5 | `return` | 0-7 | Daisy carrying the ball |
-| 6 | `shake` | 0-7 | Celebration or future hit reaction |
-| 7 | `tired-flop` | 0-7 | Tired Daisy variant idle |
-| 8 | `zoomies-vibrate` | 0-7 | Zoomies Daisy variant idle |
-| 9 | `sassy-idle` | 0-7 | Sassy Daisy variant idle |
+| 1 | `walk`, `run`, `sprint`, `return` | 0-7 | Temporary chase loop from the ChatGPT pet sprite |
+| 3 | `shake` | 0-7 | Celebration/funny reaction |
+| 4 | `pounce` | 0-5 | Temporary jump/catch animation, non-looping |
+| 6 | `tired-flop` | 0-7 | Tired/resting expression |
+| 7 | `zoomies-vibrate` | 0-7 | Active/zoomy expression |
+| 8 | `sassy-idle` | 0-7 | Sassy idle expression |
 
-To redraw Daisy later, keep the same frame size and atlas frame names. The game logic only calls animation names, so the art can be replaced without touching code.
+For the next clean game-art pass, keep the gameplay animation names stable: `idle`, `walk`, `run`, `sprint`, `pounce`, `return`, `shake`, `tired-flop`, `zoomies-vibrate`, and `sassy-idle`.

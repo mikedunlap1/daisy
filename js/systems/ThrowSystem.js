@@ -21,10 +21,13 @@ export class ThrowSystem {
   throwBall(level) {
     const side = Math.random() > 0.5 ? "left" : "right";
     const x = side === "left" ? this.scene.cameras.main.scrollX - 60 : this.scene.cameras.main.scrollX + this.scene.scale.width + 60;
-    const y = Phaser.Math.Between(GAME.world.floorMinY - 30, GAME.world.floorMaxY - 70);
+    const daisy = this.scene.daisy?.sprite;
+    const y = Phaser.Math.Clamp((daisy?.y ?? GAME.world.groundY + 70) + Phaser.Math.Between(-90, 80), GAME.world.floorMinY, GAME.world.floorMaxY - 35);
     const direction = side === "left" ? 1 : -1;
-    const speedGrow = Math.pow(GAME.levels.launchSpeedGrowth, level - 1);
-    const vx = direction * Phaser.Math.Between(GAME.ball.minLaunchVelocityX, GAME.ball.maxLaunchVelocityX) * speedGrow;
+    const speedGrow = Math.min(1.45, Math.pow(GAME.levels.launchSpeedGrowth, level - 1));
+    const targetX = Phaser.Math.Clamp((daisy?.x ?? GAME.world.width * 0.5) + Phaser.Math.Between(-180, 220), 180, GAME.world.width - 180);
+    const travelSeconds = Phaser.Math.Clamp(Math.abs(targetX - x) / Phaser.Math.Between(470, 650), 1.05, 2.2);
+    const vx = ((targetX - x) / travelSeconds) * speedGrow;
     const vy = Phaser.Math.Between(GAME.ball.minLaunchVelocityY, GAME.ball.maxLaunchVelocityY);
 
     this.showChuckit(side, y);

@@ -5,7 +5,7 @@ export const PARKS = [
     blurb: "Big sky, old fence, field lines that quit years ago.",
     groundFriction: 0.94,
     ambientTint: 0xffeeca,
-    preview: "./assets/parks/north-park/preview.png",
+    previewColor: "#eaa06c",
     layers: {
       sky: "./assets/parks/north-park/sky.png",
       far: "./assets/parks/north-park/far.png",
@@ -22,7 +22,7 @@ export const PARKS = [
     blurb: "Warm grass, sleepy trees, one trash can doing its best.",
     groundFriction: 0.91,
     ambientTint: 0xffe8ba,
-    preview: "./assets/parks/south-park/preview.png",
+    previewColor: "#b3d3dd",
     layers: {
       sky: "./assets/parks/south-park/sky.png",
       far: "./assets/parks/south-park/far.png",
@@ -39,7 +39,7 @@ export const PARKS = [
     blurb: "Home-field advantage, suspicious turf, elite snack proximity.",
     groundFriction: 0.88,
     ambientTint: 0xffe0b1,
-    preview: "./assets/parks/backyard/preview.png",
+    previewColor: "#f0b06d",
     layers: {
       sky: "./assets/parks/backyard/sky.png",
       far: "./assets/parks/backyard/far.png",

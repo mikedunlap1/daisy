@@ -37,19 +37,55 @@
 }
 
 .card-sprite {
+  display: block;
   width: 112px;
   height: 90px;
-  object-fit: none;
-  object-position: left top;
-  image-rendering: auto;
+}
+
+.css-daisy {
+  position: relative;
+  background-image: url("../assets/daisies/daisy-pet-sheet.png");
+  background-position: 0 0;
+  background-size: 896px 1092px;
+  background-repeat: no-repeat;
+}
+
+.css-daisy::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 30px;
+  width: 70px;
+  height: 34px;
+  border-radius: 50%;
+  display: none;
+  background: radial-gradient(circle at 35% 42%, #f2f0de 0 18%, transparent 19%), #151818;
+  box-shadow: 46px -14px 0 -7px #151818, 56px -5px 0 -12px #f2f0de;
+}
+
+.css-daisy::after {
+  content: "";
+  position: absolute;
+  left: 73px;
+  top: 10px;
+  width: 35px;
+  height: 43px;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  display: none;
+  background: linear-gradient(90deg, #151818 0 35%, #f2f0de 36% 70%, #151818 71%);
+  transform: rotate(6deg);
 }
 
 .park-thumb {
+  display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 6px;
-  object-fit: cover;
   border: 1px solid rgba(28, 42, 31, 0.12);
+  background:
+    linear-gradient(transparent 58%, rgba(59, 132, 72, 0.92) 59%),
+    radial-gradient(circle at 30% 26%, rgba(255,255,235,.86) 0 12%, transparent 13%),
+    linear-gradient(var(--park-preview), #7ec7d1);
 }
 
 .stat-bars {

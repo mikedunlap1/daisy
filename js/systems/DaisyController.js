@@ -7,11 +7,13 @@ export class DaisyController {
     this.stamina = 1;
     this.stopTimer = 0;
     this.carrying = false;
-    this.sprite = scene.physics.add.sprite(460, GAME.world.groundY + 68, "daisy", "idle_0.png");
+    this.shadow = scene.add.ellipse(460, GAME.world.groundY + 126, 156, 34, 0x102416, 0.28).setDepth(18);
+    this.sprite = scene.physics.add.sprite(460, GAME.world.groundY + 64, "daisy", 0);
     this.sprite.setDepth(20);
     this.sprite.setDisplaySize(GAME.render.daisyWidth, GAME.render.daisyHeight);
-    this.sprite.body.setSize(76, 58).setOffset(42, 58);
+    this.sprite.body.setSize(104, 82).setOffset(44, 92);
     this.sprite.body.setCollideWorldBounds(true);
+    this.sprite.body.setMaxVelocity(GAME.daisy.baseSpeed * 1.4);
     this.sprite.play(variant.idleAnimation || "idle");
   }
 
@@ -28,6 +30,7 @@ export class DaisyController {
     if (this.stopTimer > 0) {
       this.stopTimer -= dt;
       this.sprite.setVelocity(this.sprite.body.velocity.x * 0.86, this.sprite.body.velocity.y * 0.86);
+      this.updateShadow();
       return;
     }
 
@@ -52,7 +55,16 @@ export class DaisyController {
     this.sprite.y = Phaser.Math.Clamp(this.sprite.y, GAME.world.floorMinY, GAME.world.floorMaxY);
     this.sprite.setFlipX(this.sprite.body.velocity.x < -8);
     this.sprite.setDepth(20 + Math.floor(this.sprite.y / 12));
+    this.updateShadow();
     this.playMotionAnimation(moving);
+  }
+
+  updateShadow() {
+    this.shadow.x = this.sprite.x - (this.sprite.flipX ? -12 : 12);
+    this.shadow.y = this.sprite.y + 76;
+    this.shadow.setDepth(this.sprite.depth - 1);
+    this.shadow.scaleX = Phaser.Math.Clamp(0.9 + this.sprite.body.speed / 900, 0.9, 1.22);
+    this.shadow.alpha = Phaser.Math.Clamp(0.22 + this.sprite.body.speed / 2200, 0.22, 0.34);
   }
 
   playMotionAnimation(moving) {
@@ -73,13 +85,16 @@ export class DaisyController {
 
   tryCatch(ball) {
     if (!ball.active || ball.data.caught) return false;
-    const distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, ball.x, ball.y);
-    const airborneBonus = Math.abs(ball.data.height) < 155 ? 12 : 0;
+    const groundY = ball.data.baseY ?? ball.y;
+    const distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y + 20, ball.x, groundY);
+    const catchableHeight = ball.data.height > -185;
+    const airborneBonus = catchableHeight ? 28 : -30;
     const focusBonus = Phaser.Math.Linear(-8, 12, this.variant.stats.focus);
     if (distance < GAME.daisy.catchRadius + airborneBonus + focusBonus) {
       ball.data.caught = true;
       ball.data.shadow.destroy();
       ball.destroy();
+      this.scene.showCatchFeedback?.(ball.x, groundY);
       this.sprite.play("pounce", true);
       this.scene.time.delayedCall(GAME.daisy.catchAnimationMs, () => this.sprite.play("return", true));
       return true;
