@@ -80,6 +80,7 @@ export class MenuScene extends Phaser.Scene {
       const player = getLocalPlayer(nextSettings.playerName);
       startSession(player);
       menu.classList.remove("is-active");
+      nameInput.blur();
       this.scene.start("PlayScene", { ...nextSettings, player });
     };
 

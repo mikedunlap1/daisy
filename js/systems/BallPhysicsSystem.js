@@ -12,7 +12,7 @@ export class BallPhysicsSystem {
     ball.setDisplaySize(GAME.render.ballSize, GAME.render.ballSize);
     ball.body.setAllowGravity(false);
     ball.body.setCircle(36, 12, 12);
-    ball.data = {
+    ball.flightData = {
       height: 0,
       zVelocity: vy,
       spin: Phaser.Math.Between(-18, 18),
@@ -22,15 +22,18 @@ export class BallPhysicsSystem {
       baseY: y,
       level
     };
-    ball.setVelocity(vx, Phaser.Math.Between(-22, 44));
     this.group.add(ball);
+    // PhysicsGroup applies its defaults when a member is added, so set launch
+    // velocity afterwards or the ball is reset to a stationary object.
+    ball.setVelocity(vx, Phaser.Math.Between(-22, 44));
     return ball;
   }
 
   update(delta, park) {
     const dt = delta / 1000;
     this.group.getChildren().forEach((ball) => {
-      const data = ball.data;
+      const data = ball.flightData;
+      if (!data) return;
       data.age += dt;
       data.zVelocity += GAME.ball.gravity * dt;
       data.height += data.zVelocity * dt;

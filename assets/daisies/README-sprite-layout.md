@@ -1,20 +1,27 @@
-# Daisy Sprite Sheet Layout
+# Daisy directional sprite atlas
 
-Current source sprite: `daisy-pet-sheet.png`
-Legacy atlas file: `daisy-sheet.png` / `daisy-atlas.json`
-Source frame size: `192 x 208`
-Source grid: `8 columns x 9 rows`
+Runtime assets:
 
-`BootScene.js` loads the pet sheet, copies selected frames into a cleaned runtime canvas texture named `daisy`, and names each runtime frame as `<animation>_<frame>.png`.
+- `daisy-directional.png` / `daisy-directional.json`: production locomotion atlas.
+- `daisy-directional-source.png`: generated 6 x 5 chroma source retained for reproducible normalization.
+- `daisy-pet-sheet.png`: original character-art source, no longer loaded at runtime.
+- `backups/2026-07-17-pre-directional-pass/`: source assets before the directional pass.
 
-| Row | Animation | Frames | Notes |
-| --- | --- | ---: | --- |
-| 0 | `idle` | 0-5 | Neutral standing loop |
-| 1 | `walk`, `run`, `sprint` | 0-7 | Chase loop, with baked-in pet tennis ball cleared from the runtime copy |
-| 3 | `shake` | 0-7 | Celebration/funny reaction |
-| 4 | `pounce` | 0-5 | Jump/catch animation, non-looping |
-| 5 | `tired-flop` | 0-7 | Tired/resting expression |
-| 7 | `zoomies-vibrate` | 0-7 | Active/zoomy expression |
-| 8 | `return`, `sassy-idle` | 0-7 | Ball/rope-adjacent pet states reused for now |
+## Atlas layout
 
-For the next clean game-art pass, keep the gameplay animation names stable: `idle`, `walk`, `run`, `sprint`, `pounce`, `return`, `shake`, `tired-flop`, `zoomies-vibrate`, and `sassy-idle`.
+- Cell: `192 x 208` transparent pixels.
+- Grid: 6 frames x 5 authored directions.
+- Rows: `n`, `ne`, `e`, `se`, `s`.
+- Frames: `run-{direction}-{0..5}.png`.
+- Pivot: bottom-center at `(0.5, 192 / 208)`; every silhouette is padded and paw-aligned.
+- `w`, `nw`, and `sw` mirror `e`, `ne`, and `se` in `DaisyController`.
+
+Walk, run, and sprint share the six-frame authored cycle at different rates. Idle and short action/recovery poses select stable frames from the same clean directional atlas. A carried tennis ball is a separate Phaser sprite and is never part of a Daisy frame.
+
+Regenerate the normalized atlas with the bundled Python/Pillow runtime:
+
+```powershell
+python tools/build_directional_atlas.py assets/daisies/daisy-directional-source.png assets/daisies/daisy-directional.png assets/daisies/daisy-directional.json
+```
+
+The builder detects chroma-separated row/column bands, removes the green matte, scales each complete silhouette inside a safe content box, and emits Phaser atlas source-size and pivot metadata.

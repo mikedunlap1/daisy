@@ -54,3 +54,24 @@
   font-weight: 950;
   line-height: 1;
 }
+.jump-button {
+  position: fixed;
+  right: max(24px, env(safe-area-inset-right));
+  bottom: max(72px, calc(env(safe-area-inset-bottom) + 58px));
+  z-index: 40;
+  width: 86px;
+  height: 86px;
+  border: 2px solid rgba(255,255,255,.72);
+  border-radius: 50%;
+  color: #173014;
+  background: rgba(189,232,65,.88);
+  font-weight: 900;
+  text-transform: uppercase;
+  touch-action: none;
+  user-select: none;
+}
+
+.screen-panel.is-active ~ .jump-button,
+.score-panel.is-active ~ .jump-button {
+  display: none;
+}
