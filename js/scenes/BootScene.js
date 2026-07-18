@@ -2,21 +2,8 @@ import { PARKS } from "../config/parks.js";
 
 const W = 1536;
 const H = 864;
-const FRAME_W = 192;
-const FRAME_H = 208;
-const DAISY_ROWS = ["idle", "walk", "run", "sprint", "pounce", "return", "shake", "tired-flop", "zoomies-vibrate", "sassy-idle"];
-const PET_ROWS = {
-  idle: 0,
-  walk: 1,
-  run: 1,
-  sprint: 1,
-  pounce: 4,
-  return: 8,
-  shake: 3,
-  "tired-flop": 5,
-  "zoomies-vibrate": 7,
-  "sassy-idle": 8
-};
+const AUTHORED_DIRECTIONS = ["n", "ne", "e", "se", "s"];
+const LOCOMOTION_STATES = { walk: 9, run: 13, sprint: 17 };
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -25,13 +12,12 @@ export class BootScene extends Phaser.Scene {
 
   preload() {
     this.load.image("backyard-171", "./assets/parks/backyard/171-backyard.png");
-    this.load.image("daisy-pet-source", "./assets/daisies/daisy-pet-sheet.png");
+    this.load.atlas("daisy", "./assets/daisies/daisy-directional.png", "./assets/daisies/daisy-directional.json");
   }
 
   create() {
     this.createParkTextures();
     this.createPropTextures();
-    this.createDaisyTexture();
     this.createDaisyAnimations();
     this.scene.start("MenuScene");
   }
@@ -97,52 +83,17 @@ export class BootScene extends Phaser.Scene {
     this.textures.addCanvas("chuckit", chuck);
   }
 
-  createDaisyTexture() {
-    const canvas = document.createElement("canvas");
-    canvas.width = FRAME_W * 8;
-    canvas.height = FRAME_H * DAISY_ROWS.length;
-    const ctx = canvas.getContext("2d");
-    const source = this.textures.get("daisy-pet-source").getSourceImage();
-
-    DAISY_ROWS.forEach((animation, row) => {
-      for (let frame = 0; frame < 8; frame += 1) {
-        drawPetDaisyFrame(ctx, source, frame * FRAME_W, row * FRAME_H, animation, frame);
-      }
-    });
-
-    const texture = this.textures.addCanvas("daisy", canvas);
-    DAISY_ROWS.forEach((animation, row) => {
-      for (let frame = 0; frame < 8; frame += 1) {
-        texture.add(`${animation}_${frame}.png`, 0, frame * FRAME_W, row * FRAME_H, FRAME_W, FRAME_H);
-      }
-    });
-  }
-
   createDaisyAnimations() {
-    const animations = [
-      ["idle", 0, 5, 7],
-      ["walk", 0, 7, 10],
-      ["run", 0, 7, 13],
-      ["sprint", 0, 7, 16],
-      ["pounce", 0, 5, 14],
-      ["return", 0, 7, 10],
-      ["shake", 0, 7, 16],
-      ["tired-flop", 0, 7, 5],
-      ["zoomies-vibrate", 0, 7, 20],
-      ["sassy-idle", 0, 7, 8]
-    ];
-
-    animations.forEach(([key, start, end, frameRate]) => {
-      this.anims.create({
-        key,
-        frames: this.anims.generateFrameNames("daisy", {
-          prefix: `${key}_`,
-          suffix: ".png",
-          start,
-          end
-        }),
-        frameRate,
-        repeat: key === "pounce" ? 0 : -1
+    Object.entries(LOCOMOTION_STATES).forEach(([state, frameRate]) => {
+      AUTHORED_DIRECTIONS.forEach((direction) => {
+        this.anims.create({
+          key: `daisy-${state}-${direction}`,
+          frames: this.anims.generateFrameNames("daisy", {
+            prefix: `run-${direction}-`, suffix: ".png", start: 0, end: 5
+          }),
+          frameRate,
+          repeat: -1
+        });
       });
     });
   }
@@ -246,34 +197,6 @@ function drawParkLayer(ctx, layer, skyTop, seed, backyardImage) {
       line(ctx, x, y, x + Math.sin(i) * 20, y - 80 - (i % 40));
     }
   }
-}
-
-function drawPetDaisyFrame(ctx, source, ox, oy, animation, frame) {
-  const sourceRow = PET_ROWS[animation] ?? 0;
-  const sourceFrame = Math.min(frame, animation === "idle" ? 5 : 7);
-  const sx = sourceFrame * FRAME_W;
-  const sy = sourceRow * FRAME_H;
-
-  ctx.save();
-  ctx.translate(ox, oy);
-  ctx.clearRect(0, 0, FRAME_W, FRAME_H);
-  ctx.drawImage(source, sx, sy, FRAME_W, FRAME_H, 0, 0, FRAME_W, FRAME_H);
-
-  if (["walk", "run", "sprint"].includes(animation)) {
-    ctx.clearRect(122, 82, 70, 76);
-    ctx.clearRect(0, 0, 26, FRAME_H);
-  }
-
-  if (animation === "return") {
-    ctx.clearRect(122, 82, 70, 76);
-  }
-
-  if (animation === "pounce") {
-    ctx.clearRect(0, 0, 36, FRAME_H);
-    ctx.clearRect(150, 0, 42, FRAME_H);
-  }
-
-  ctx.restore();
 }
 
 function drawDaisyFrame(ctx, ox, oy, animation, frame) {

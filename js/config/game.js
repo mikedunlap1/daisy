@@ -20,7 +20,14 @@ export const GAME = {
     lowStaminaSpeed: 0.74,
     tiredStopChancePerSecond: 0.04,
     tiredStopSeconds: 0.8,
-    catchAnimationMs: 260
+    catchAnimationMs: 260,
+    jumpVelocity: 470,
+    jumpGravity: 1050,
+    returnAnimationMs: 520,
+    landingRecoveryMs: 140,
+    idleSpeedThreshold: 35,
+    runThreshold: 120,
+    directionHysteresisDegrees: 14
   },
   ball: {
     gravity: 1180,
@@ -41,7 +48,7 @@ export const GAME = {
     firstDelay: 650,
     waveDelay: 1050,
     maxActiveBalls: 1,
-    chuckitVisibleMs: 520
+    chuckitVisibleMs: 1100
   },
   levels: {
     roundSeconds: 45,

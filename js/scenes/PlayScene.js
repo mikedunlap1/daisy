@@ -1,11 +1,11 @@
 import { DAISIES } from "../config/daisies.js";
 import { PARKS } from "../config/parks.js";
 import { GAME } from "../config/game.js";
-import { InputSystem } from "../systems/InputSystem.js";
+import { InputSystem } from "../systems/InputSystem.js?v=20260718-2";
 import { ParallaxSystem } from "../systems/ParallaxSystem.js";
-import { BallPhysicsSystem } from "../systems/BallPhysicsSystem.js";
-import { DaisyController } from "../systems/DaisyController.js";
-import { ThrowSystem } from "../systems/ThrowSystem.js";
+import { BallPhysicsSystem } from "../systems/BallPhysicsSystem.js?v=20260718-5";
+import { DaisyController } from "../systems/DaisyController.js?v=20260718-2";
+import { ThrowSystem } from "../systems/ThrowSystem.js?v=20260718-2";
 import { CameraSystem } from "../systems/CameraSystem.js";
 import { ScoreSystem } from "../systems/ScoreSystem.js";
 import { submitScore } from "../data/api.js";
@@ -51,16 +51,17 @@ export class PlayScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-    const remaining = Math.max(0, this.roundMs - (time - this.startedAt));
+    const now = this.time.now;
+    const remaining = Math.max(0, this.roundMs - (now - this.startedAt));
     if (remaining <= 0) {
       this.endRound();
       return;
     }
 
     const input = this.inputSystem.getVector();
-    this.daisy.update(input, delta);
+    this.daisy.update(input, delta, this.inputSystem.consumeJump());
     this.ballSystem.update(delta, this.park);
-    this.throwSystem.update(time, this.balls.countActive(true), this.scoreSystem.level);
+    this.throwSystem.update(now, this.balls.countActive(true), this.scoreSystem.level);
 
     this.balls.getChildren().forEach((ball) => {
       if (this.daisy.tryCatch(ball)) this.scoreSystem.catch();

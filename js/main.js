@@ -1,6 +1,6 @@
 import { BootScene } from "./scenes/BootScene.js";
 import { MenuScene } from "./scenes/MenuScene.js";
-import { PlayScene } from "./scenes/PlayScene.js";
+import { PlayScene } from "./scenes/PlayScene.js?v=20260718-6";
 import { ScoreScene } from "./scenes/ScoreScene.js";
 
 const config = {
