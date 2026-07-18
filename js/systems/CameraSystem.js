@@ -6,6 +6,20 @@ export class CameraSystem {
     this.target = target;
     scene.cameras.main.setBounds(0, 0, GAME.world.width, GAME.world.height);
     scene.cameras.main.setZoom(GAME.camera.zoomNormal);
+    this.snapToStartSide();
+  }
+
+  snapToStartSide() {
+    const camera = this.scene.cameras.main;
+    const visibleWidth = camera.width / camera.zoom;
+    const visibleHeight = camera.height / camera.zoom;
+    const scrollX = GAME.camera.startSide === "right" ? Math.max(0, GAME.world.width - visibleWidth) : 0;
+    const scrollY = Phaser.Math.Clamp(
+      this.target.y + GAME.camera.leadY - visibleHeight / 2,
+      0,
+      Math.max(0, GAME.world.height - visibleHeight)
+    );
+    camera.setScroll(scrollX, scrollY);
   }
 
   update(delta) {

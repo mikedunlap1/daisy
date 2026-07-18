@@ -2,13 +2,14 @@ import { DAISIES } from "../config/daisies.js";
 import { PARKS } from "../config/parks.js";
 import { GAME } from "../config/game.js";
 import { InputSystem } from "../systems/InputSystem.js?v=20260718-2";
-import { ParallaxSystem } from "../systems/ParallaxSystem.js";
-import { BallPhysicsSystem } from "../systems/BallPhysicsSystem.js?v=20260718-5";
-import { DaisyController } from "../systems/DaisyController.js?v=20260718-2";
-import { ThrowSystem } from "../systems/ThrowSystem.js?v=20260718-2";
-import { CameraSystem } from "../systems/CameraSystem.js";
+import { ParallaxSystem } from "../systems/ParallaxSystem.js?v=20260718-2";
+import { BallPhysicsSystem } from "../systems/BallPhysicsSystem.js?v=20260718-6";
+import { DaisyController } from "../systems/DaisyController.js?v=20260718-5";
+import { ThrowSystem } from "../systems/ThrowSystem.js?v=20260718-4";
+import { CameraSystem } from "../systems/CameraSystem.js?v=20260718-1";
 import { ScoreSystem } from "../systems/ScoreSystem.js";
 import { submitScore } from "../data/api.js";
+import { audioSystem } from "../systems/AudioSystem.js";
 
 export class PlayScene extends Phaser.Scene {
   constructor() {
@@ -40,7 +41,77 @@ export class PlayScene extends Phaser.Scene {
 
     this.createLighting();
     document.querySelector("#hud").classList.add("is-active");
+    document.querySelector("#hud-player").textContent = this.dataFromMenu.player?.name || "Anonymous";
+    this.setupPauseControls();
+    audioSystem.play("gameplay");
     this.updateHud();
+  }
+
+  setupPauseControls() {
+    this.isPaused = false;
+    this.pauseOverlay = document.querySelector("#pause-overlay");
+    this.pauseButton = document.querySelector("#pause-toggle");
+    this.resumeButton = document.querySelector("#resume-game");
+    this.menuButton = document.querySelector("#pause-menu");
+    this.pauseButton.classList.add("is-active");
+    this.pauseButton.onclick = () => this.pauseGame();
+    this.resumeButton.onclick = () => this.resumeGame();
+    this.menuButton.onclick = () => this.returnToMenu();
+    this.onPauseKey = (event) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      if (this.isPaused) this.resumeGame();
+      else this.pauseGame();
+    };
+    this.onVisibilityChange = () => {
+      if (document.hidden && !this.isPaused) this.pauseGame();
+    };
+    window.addEventListener("keydown", this.onPauseKey);
+    document.addEventListener("visibilitychange", this.onVisibilityChange);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.cleanupPauseControls());
+  }
+
+  pauseGame() {
+    if (this.isPaused || this.isEnding) return;
+    this.isPaused = true;
+    this.inputSystem.resetTouch();
+    this.pauseOverlay.classList.add("is-active");
+    this.pauseOverlay.setAttribute("aria-hidden", "false");
+    this.pauseButton.classList.remove("is-active");
+    audioSystem.setGamePaused(true);
+    this.scene.pause();
+  }
+
+  resumeGame() {
+    if (!this.isPaused) return;
+    this.isPaused = false;
+    this.pauseOverlay.classList.remove("is-active");
+    this.pauseOverlay.setAttribute("aria-hidden", "true");
+    this.pauseButton.classList.add("is-active");
+    this.scene.resume();
+    audioSystem.setGamePaused(false);
+  }
+
+  returnToMenu() {
+    this.isPaused = false;
+    this.pauseOverlay.classList.remove("is-active");
+    this.pauseOverlay.setAttribute("aria-hidden", "true");
+    document.querySelector("#hud").classList.remove("is-active");
+    this.pauseButton.classList.remove("is-active");
+    audioSystem.setGamePaused(false);
+    audioSystem.stop();
+    this.scene.start("MenuScene");
+  }
+
+  cleanupPauseControls() {
+    window.removeEventListener("keydown", this.onPauseKey);
+    document.removeEventListener("visibilitychange", this.onVisibilityChange);
+    if (this.pauseButton) {
+      this.pauseButton.onclick = null;
+      this.pauseButton.classList.remove("is-active");
+    }
+    if (this.resumeButton) this.resumeButton.onclick = null;
+    if (this.menuButton) this.menuButton.onclick = null;
   }
 
   createLighting() {
@@ -120,6 +191,7 @@ export class PlayScene extends Phaser.Scene {
     };
     submitScore(payload);
     document.querySelector("#hud").classList.remove("is-active");
+    this.pauseButton?.classList.remove("is-active");
     this.scene.start("ScoreScene", payload);
   }
 }

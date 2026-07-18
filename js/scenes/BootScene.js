@@ -1,7 +1,8 @@
 import { PARKS } from "../config/parks.js";
+import { GAME } from "../config/game.js";
 
-const W = 1536;
-const H = 864;
+const W = GAME.world.width;
+const H = GAME.world.height;
 const AUTHORED_DIRECTIONS = ["n", "ne", "e", "se", "s"];
 const LOCOMOTION_STATES = { walk: 9, run: 13, sprint: 17 };
 
@@ -11,7 +12,8 @@ export class BootScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("backyard-171", "./assets/parks/backyard/171-backyard.png");
+    this.load.image("backyard-171-wide", "./assets/parks/backyard/171-backyard-wide.png");
+    this.load.image("tennis-ball", "./assets/props/tennis-ball-realistic.png");
     this.load.atlas("daisy", "./assets/daisies/daisy-directional.png", "./assets/daisies/daisy-directional.json");
   }
 
@@ -24,12 +26,13 @@ export class BootScene extends Phaser.Scene {
 
   createParkTextures() {
     PARKS.forEach((park, parkIndex) => {
+      const backyardImage = park.id === "backyard" ? this.textures.get("backyard-171-wide")?.getSourceImage() : null;
       ["sky", "far", "mid", "near", "ground", "foreground"].forEach((layer) => {
         const canvas = document.createElement("canvas");
         canvas.width = W;
         canvas.height = H;
         const ctx = canvas.getContext("2d");
-        drawParkLayer(ctx, layer, park.previewColor, parkIndex, this.textures.get("backyard-171")?.getSourceImage());
+        drawParkLayer(ctx, layer, park.previewColor, parkIndex, backyardImage);
         this.textures.addCanvas(`park-${park.id}-${layer}`, canvas);
         if (parkIndex === 0) this.textures.addCanvas(`park-${layer}`, canvas);
       });
@@ -37,29 +40,6 @@ export class BootScene extends Phaser.Scene {
   }
 
   createPropTextures() {
-    const ball = document.createElement("canvas");
-    ball.width = 96;
-    ball.height = 96;
-    const b = ball.getContext("2d");
-    b.fillStyle = "#bde841";
-    b.strokeStyle = "#f7f9df";
-    b.lineWidth = 6;
-    b.beginPath();
-    b.arc(48, 48, 36, 0, Math.PI * 2);
-    b.fill();
-    b.strokeStyle = "#7da82d";
-    b.lineWidth = 2;
-    b.stroke();
-    b.strokeStyle = "#f7f9df";
-    b.lineWidth = 5;
-    b.beginPath();
-    b.arc(48, 48, 27, -1.25, 1.25);
-    b.stroke();
-    b.beginPath();
-    b.arc(48, 48, 27, 1.9, 4.35);
-    b.stroke();
-    this.textures.addCanvas("tennis-ball", ball);
-
     const chuck = document.createElement("canvas");
     chuck.width = 220;
     chuck.height = 120;

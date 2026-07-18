@@ -4,67 +4,114 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Daisy Ball Chase</title>
-    <link rel="stylesheet" href="./css/base.css">
-    <link rel="stylesheet" href="./css/layout.css">
-    <link rel="stylesheet" href="./css/cards.css">
-    <link rel="stylesheet" href="./css/menu.css">
-    <link rel="stylesheet" href="./css/hud.css">
-    <link rel="stylesheet" href="./css/game-overlay.css">
+    <link rel="stylesheet" href="./css/base.css?v=20260718-2">
+    <link rel="stylesheet" href="./css/layout.css?v=20260718-2">
+    <link rel="stylesheet" href="./css/cards.css?v=20260718-1">
+    <link rel="stylesheet" href="./css/menu.css?v=20260718-1">
+    <link rel="stylesheet" href="./css/hud.css?v=20260718-1">
+    <link rel="stylesheet" href="./css/game-overlay.css?v=20260718-4">
   </head>
   <body>
     <main id="app-shell">
       <div id="game"></div>
 
       <section id="menu-overlay" class="screen-panel is-active" aria-label="Game setup">
-        <div class="menu-copy">
-          <p class="eyebrow">Daisy's Dashboard presents</p>
-          <h1>Daisy Ball Chase</h1>
-          <p class="lede">Steer Daisy into chaotic tennis balls. Best score wins family bragging rights.</p>
-        </div>
-
-        <label class="name-field">
-          <span>Your name</span>
-          <input id="player-name" type="text" autocomplete="nickname" maxlength="28" placeholder="Big Hoss">
-        </label>
-
-        <div class="picker-block">
-          <div class="picker-heading">
-            <h2>Pick your Daisy</h2>
-            <p>Same dog, very different life choices.</p>
+        <div class="menu-stage">
+          <div class="menu-topline">
+            <span class="menu-mark">DB</span>
+            <span>Daisy Ball Chase / 171</span>
           </div>
-          <div id="daisy-cards" class="card-grid"></div>
-        </div>
 
-        <div class="picker-block">
-          <div class="picker-heading">
-            <h2>Pick your park</h2>
-            <p>Real enough to feel like Saturday.</p>
+          <div class="menu-copy">
+            <p class="eyebrow">Home-field edition</p>
+            <h1>Daisy.<br><em>Ready to run.</em></h1>
+            <p class="lede">Steer Daisy into chaotic tennis balls. Best score wins family bragging rights.</p>
+            <p class="mobile-landscape-note">Playing on a phone? Best experienced in landscape.</p>
           </div>
-          <div id="park-cards" class="card-grid park-grid"></div>
-        </div>
 
-        <button id="start-game" class="primary-action" type="button">Start Chasing</button>
+          <div class="menu-daisy" aria-hidden="true">
+            <span class="menu-daisy__sprite"></span>
+            <span class="menu-daisy__caption" id="menu-hero-name">Sassy Daisy</span>
+          </div>
+
+          <aside class="menu-controls">
+            <label class="name-field">
+              <span>Your name</span>
+              <input id="player-name" type="text" autocomplete="nickname" maxlength="28" placeholder="Big Hoss">
+            </label>
+
+            <div class="picker-block">
+              <div class="picker-heading">
+                <h2>Pick your Daisy</h2>
+                <p>Choose your energy.</p>
+              </div>
+              <div id="daisy-cards" class="card-grid"></div>
+            </div>
+
+            <div class="picker-block">
+              <div class="picker-heading">
+                <h2>Pick your park</h2>
+                <p>Choose the field.</p>
+              </div>
+              <div id="park-cards" class="card-grid park-grid"></div>
+            </div>
+
+            <button id="start-game" class="primary-action" type="button">Start Chasing <span aria-hidden="true">&#8599;</span></button>
+          </aside>
+        </div>
       </section>
 
-      <section id="score-overlay" class="screen-panel score-panel" aria-label="Round score">
-        <p class="eyebrow">Round complete</p>
-        <h2 id="score-title">Daisy Report</h2>
-        <div class="score-big"><span id="final-score">0</span> catches</div>
-        <p id="score-line">Daisy is considering whether this was worth getting up for.</p>
-        <button id="play-again" class="primary-action" type="button">Throw More</button>
+      <section id="score-overlay" class="score-panel" aria-label="Round score">
+        <div class="report-stage">
+          <div class="report-topline">
+            <span class="report-mark">DR</span>
+            <span>Daisy Report / 171</span>
+            <span id="report-date">Field edition</span>
+          </div>
+
+          <div class="report-headline">
+            <p class="eyebrow">Round complete</p>
+            <h2 id="score-title"><span id="report-player">Daisy</span><br>chased.<br><em id="report-verdict">Hard.</em></h2>
+          </div>
+
+          <aside class="report-card" aria-label="Round details">
+            <div class="report-card__image" aria-hidden="true">
+              <span class="report-daisy"></span>
+            </div>
+            <p class="report-card__label">Field results</p>
+            <div class="score-big"><span id="final-score">0</span><small>catches</small></div>
+            <dl class="report-stats">
+              <div><dt>Best streak</dt><dd id="report-streak">0</dd></div>
+              <div><dt>Location</dt><dd>Backyard 171</dd></div>
+            </dl>
+            <p id="score-line">Daisy is considering whether this was worth getting up for.</p>
+            <button id="play-again" class="report-action" type="button">Throw More <span aria-hidden="true">&#8599;</span></button>
+          </aside>
+        </div>
       </section>
 
       <section id="hud" class="hud" aria-label="Game HUD">
+        <div class="player-chip"><span>Player</span><strong id="hud-player">Anonymous</strong></div>
         <div><span>Score</span><strong id="hud-score">0</strong></div>
         <div><span>Streak</span><strong id="hud-streak">0</strong></div>
         <div><span>Time</span><strong id="hud-time">45</strong></div>
         <div class="stamina-wrap"><span>Stamina</span><meter id="hud-stamina" min="0" max="1" value="1"></meter></div>
       </section>
 
+      <section id="pause-overlay" class="pause-overlay" aria-label="Game paused" aria-hidden="true">
+        <p class="eyebrow">Daisy is waiting</p>
+        <h2>Paused</h2>
+        <div class="pause-actions">
+          <button id="resume-game" class="primary-action" type="button">Resume</button>
+          <button id="pause-menu" class="secondary-action" type="button">Back to Menu</button>
+        </div>
+      </section>
+
       <div id="touch-stick" class="touch-stick" aria-hidden="true">
         <div class="touch-stick__nub"></div>
       </div>
       <button id="jump-button" class="jump-button" type="button" aria-label="Jump">Jump</button>
+      <button id="pause-toggle" class="pause-toggle" type="button">Pause</button>
       <button id="mute-toggle" class="mute-toggle" type="button" aria-pressed="true">Muted</button>
     </main>
 
@@ -74,6 +121,6 @@
         document.write('<script src="./js/vendor/phaser.min.js"><\/script>');
       }
     </script>
-    <script type="module" src="./js/main.js?v=20260718-6"></script>
+    <script type="module" src="./js/main.js?v=20260718-16"></script>
   </body>
 </html>

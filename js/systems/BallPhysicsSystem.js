@@ -7,11 +7,19 @@ export class BallPhysicsSystem {
   }
 
   launch({ x, y, vx, vy, level = 1 }) {
-    const shadow = this.scene.add.ellipse(x, y + 24, 58, 18, 0x102416, 0.3).setDepth(8);
+    const shadow = this.scene.add.ellipse(
+      x,
+      y + 20,
+      GAME.render.ballShadowWidth,
+      GAME.render.ballShadowHeight,
+      0x102416,
+      0.26
+    ).setDepth(8);
     const ball = this.scene.physics.add.sprite(x, y, "tennis-ball").setDepth(9);
     ball.setDisplaySize(GAME.render.ballSize, GAME.render.ballSize);
     ball.body.setAllowGravity(false);
-    ball.body.setCircle(36, 12, 12);
+    const collisionDiameter = ball.width * 0.72;
+    ball.body.setCircle(collisionDiameter / 2, (ball.width - collisionDiameter) / 2, (ball.height - collisionDiameter) / 2);
     ball.flightData = {
       height: 0,
       zVelocity: vy,
@@ -20,7 +28,9 @@ export class BallPhysicsSystem {
       caught: false,
       shadow,
       baseY: y,
-      level
+      level,
+      baseScale: ball.scaleX,
+      impact: 0
     };
     this.group.add(ball);
     // PhysicsGroup applies its defaults when a member is added, so set launch
@@ -44,6 +54,7 @@ export class BallPhysicsSystem {
         data.zVelocity *= -GAME.ball.bounceDamping;
         ball.body.velocity.x *= GAME.ball.bounceHorizontalDamping;
         ball.body.velocity.y *= GAME.ball.bounceHorizontalDamping;
+        data.impact = 1;
         if (Math.abs(data.zVelocity) < 120) data.zVelocity = 0;
       }
 
@@ -54,10 +65,19 @@ export class BallPhysicsSystem {
       }
 
       data.spin *= GAME.ball.spinDecay;
+      data.impact *= GAME.render.ballImpactRecovery;
       ball.rotation += data.spin * dt;
       data.baseY = Phaser.Math.Clamp(data.baseY, GAME.world.floorMinY - 20, GAME.world.floorMaxY + 20);
       ball.y = data.baseY + data.height * 0.22;
-      ball.setScale(Phaser.Math.Clamp(0.55 + Math.abs(data.height) / 1250, 0.5, 0.78));
+      const heightScale = Phaser.Math.Clamp(
+        GAME.render.ballMinScale + Math.abs(data.height) / GAME.render.ballHeightScale,
+        GAME.render.ballMinScale,
+        GAME.render.ballMaxScale
+      );
+      ball.setScale(
+        data.baseScale * heightScale * (1 + data.impact * GAME.render.ballImpactSquashX),
+        data.baseScale * heightScale * (1 - data.impact * GAME.render.ballImpactSquashY)
+      );
       ball.setDepth(10 + Math.floor(ball.y / 16));
 
       data.shadow.x = ball.x;

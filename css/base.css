@@ -5,8 +5,10 @@
   --panel: rgba(255, 252, 238, 0.9);
   --panel-strong: rgba(255, 250, 230, 0.96);
   --line: rgba(64, 74, 56, 0.18);
-  --blue: #1b68d8;
-  --green: #bde841;
+  --blue: #245f86;
+  --blue-bright: #66b9d4;
+  --blue-deep: #12384f;
+  --green: #d8ff55;
   --shadow: 0 18px 46px rgba(50, 42, 27, 0.22);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -21,13 +23,18 @@ body {
   height: 100%;
   margin: 0;
   overflow: hidden;
-  background: #9dccd4;
+  background: #8bc3d2;
   color: var(--ink);
 }
 
 body {
+  display: grid;
+  place-items: center;
   overscroll-behavior: none;
   touch-action: none;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(143, 207, 225, 0.76), transparent 52%),
+    #245f86;
 }
 
 button,

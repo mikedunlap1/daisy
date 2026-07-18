@@ -1,93 +1,200 @@
-.menu-copy {
-  max-width: 720px;
+#menu-overlay {
+  inset: clamp(10px, 2vw, 24px);
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-color: rgba(255,255,255,.3);
+  border-radius: clamp(10px, 1.8vw, 22px);
+  color: white;
+  background: var(--blue-deep);
 }
 
-.eyebrow {
-  margin: 0 0 8px;
-  color: #806432;
-  font-size: 12px;
+.menu-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: clamp(16px, 3vw, 38px);
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(9, 39, 59, .88), rgba(9, 39, 59, .34) 52%, rgba(9, 39, 59, .12)),
+    linear-gradient(0deg, rgba(7, 29, 45, .62), transparent 55%),
+    url("../assets/parks/backyard/171-backyard-wide.png") 100% center / cover no-repeat;
+}
+
+.menu-topline {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(8px, 1vw, 11px);
   font-weight: 900;
-  letter-spacing: 0.12em;
+  letter-spacing: .1em;
   text-transform: uppercase;
 }
 
-h1,
-h2,
-p {
-  margin-top: 0;
+.menu-mark {
+  display: grid;
+  width: 29px;
+  height: 29px;
+  place-items: center;
+  border-radius: 7px;
+  color: var(--blue-deep);
+  background: var(--green);
+  letter-spacing: -.08em;
 }
 
-h1 {
-  margin-bottom: 8px;
-  font-size: clamp(40px, 7vw, 82px);
-  line-height: 0.95;
+.menu-copy {
+  position: absolute;
+  left: clamp(20px, 4vw, 58px);
+  bottom: clamp(24px, 5vw, 58px);
+  z-index: 3;
+  max-width: 49%;
 }
 
-h2 {
-  margin-bottom: 4px;
-  font-size: clamp(22px, 2.3vw, 30px);
+.menu-copy .eyebrow {
+  color: var(--green);
+}
+
+.menu-copy h1 {
+  margin: 0 0 18px;
+  font-size: clamp(48px, 8vw, 104px);
+  font-weight: 950;
+  line-height: .82;
+  letter-spacing: -.075em;
+}
+
+.menu-copy h1 em {
+  color: var(--green);
+  font-style: normal;
 }
 
 .lede {
-  max-width: 640px;
-  color: var(--muted);
-  font-size: clamp(17px, 2vw, 22px);
+  max-width: 500px;
+  margin-bottom: 0;
+  color: rgba(255,255,255,.78);
+  font-size: clamp(12px, 1.45vw, 18px);
+}
+
+.mobile-landscape-note {
+  display: none;
+  margin: 10px 0 0;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.menu-daisy {
+  position: absolute;
+  left: 50%;
+  bottom: 10%;
+  z-index: 2;
+  width: clamp(150px, 21vw, 270px);
+  height: clamp(170px, 25vw, 310px);
+  transform: translateX(-35%);
+}
+
+.menu-daisy__sprite {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  width: 192px;
+  height: 208px;
+  background: url("../assets/daisies/daisy-pet-sheet.png") 0 0 / 1536px 1872px no-repeat;
+  filter: drop-shadow(0 22px 16px rgba(0,0,0,.38));
+  transform: translateX(-50%) scale(clamp(.78, 1.25vw, 1.22));
+  transform-origin: bottom center;
+}
+
+.menu-daisy__caption {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  padding: 6px 10px;
+  border: 1px solid rgba(255,255,255,.34);
+  border-radius: 999px;
+  white-space: nowrap;
+  color: white;
+  background: rgba(23, 74, 105, .74);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+  backdrop-filter: blur(8px);
+}
+
+.menu-controls {
+  position: absolute;
+  top: clamp(16px, 3vw, 38px);
+  right: clamp(16px, 3vw, 38px);
+  bottom: clamp(16px, 3vw, 38px);
+  z-index: 5;
+  width: clamp(280px, 31vw, 390px);
+  padding: clamp(13px, 1.8vw, 20px);
+  overflow: auto;
+  border: 1px solid rgba(255,255,255,.32);
+  border-radius: 13px;
+  color: white;
+  background: rgba(27, 83, 117, .82);
+  box-shadow: 0 22px 60px rgba(3, 20, 31, .36);
+  backdrop-filter: blur(16px) saturate(1.18);
 }
 
 .name-field {
   display: grid;
-  gap: 7px;
-  max-width: 390px;
-  margin: 22px 0;
-  font-weight: 800;
+  gap: 6px;
+  margin: 0;
+  color: rgba(255,255,255,.7);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
 }
 
 .name-field input {
   width: 100%;
-  padding: 13px 14px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.75);
-  color: var(--ink);
+  padding: 10px 11px;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 7px;
+  color: white;
+  background: rgba(8, 40, 61, .48);
   outline: none;
 }
 
-.name-field input:focus {
-  border-color: rgba(27, 104, 216, 0.62);
-  box-shadow: 0 0 0 4px rgba(27, 104, 216, 0.13);
-}
+.name-field input::placeholder { color: rgba(255,255,255,.42); }
+.name-field input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(216,255,85,.14); }
 
-.picker-block {
-  margin-top: 24px;
-}
-
-.picker-heading {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 12px;
-}
-
-.picker-heading p {
-  margin-bottom: 5px;
-  color: var(--muted);
-}
+.picker-block { margin-top: 14px; }
+.picker-heading { display: flex; align-items: end; justify-content: space-between; gap: 10px; margin-bottom: 7px; }
+.picker-heading h2 { margin: 0; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+.picker-heading p { margin: 0; color: rgba(255,255,255,.55); font-size: 9px; }
 
 .primary-action {
-  min-width: 190px;
-  margin-top: 24px;
-  padding: 14px 20px;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 11px 13px;
   border: 0;
-  border-radius: 8px;
-  background: var(--blue);
-  color: white;
-  font-weight: 900;
-  box-shadow: 0 12px 24px rgba(27, 104, 216, 0.24);
+  border-radius: 7px;
+  color: var(--blue-deep);
+  background: var(--green);
+  box-shadow: 0 12px 26px rgba(4,24,36,.24);
+  font-weight: 950;
 }
 
-@media (max-width: 720px) {
-  .picker-heading {
-    display: block;
-  }
+@media (orientation: portrait) and (max-width: 720px) {
+  #menu-overlay { inset: 0; border: 0; border-radius: 0; }
+  .menu-stage { padding: 18px; overflow: auto; background-position: 68% center; }
+  .menu-copy { position: relative; left: auto; bottom: auto; max-width: 100%; margin-top: 15vh; }
+  .menu-copy h1 { font-size: clamp(54px, 17vw, 82px); }
+  .menu-copy .lede { max-width: 80%; }
+  .mobile-landscape-note { display: block; }
+  .menu-daisy { left: auto; right: 0; top: 9%; bottom: auto; width: 150px; height: 190px; transform: scale(.72); transform-origin: top right; }
+  .menu-controls { position: relative; inset: auto; width: 100%; margin-top: 28px; max-height: none; background: rgba(27,83,117,.9); }
 }

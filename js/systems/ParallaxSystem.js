@@ -9,19 +9,19 @@ export class ParallaxSystem {
   create(world) {
     const order = ["sky", "far", "mid", "near", "ground", "foreground"];
     order.forEach((name, index) => {
-      const tile = this.scene.add.tileSprite(0, 0, world.width, world.height, `park-${this.park.id}-${name}`);
-      tile.setOrigin(0, 0);
-      tile.setDepth(index - 20);
-      tile.setScrollFactor(0);
-      if (name === "foreground") tile.setAlpha(0.78);
-      this.layers.push({ name, tile, factor: this.park.parallax[name] ?? 1 });
+      const image = this.scene.add.image(0, 0, `park-${this.park.id}-${name}`);
+      image.setOrigin(0, 0);
+      image.setDisplaySize(world.width, world.height);
+      image.setDepth(index - 20);
+      // Finite artwork must never outrun the world edge. Values above 1 only
+      // worked when the old TileSprite could silently repeat its texture.
+      const configuredFactor = this.park.parallax[name] ?? 1;
+      const factor = this.park.id === "backyard" && name === "sky" ? 1 : configuredFactor;
+      image.setScrollFactor(Math.min(1, factor));
+      if (name === "foreground") image.setAlpha(0.78);
+      this.layers.push({ name, image });
     });
   }
 
-  update(camera) {
-    this.layers.forEach(({ tile, factor, name }) => {
-      tile.tilePositionX = camera.scrollX * factor;
-      tile.tilePositionY = name === "sky" ? camera.scrollY * 0.02 : camera.scrollY * factor * 0.22;
-    });
-  }
+  update() {}
 }
