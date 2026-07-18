@@ -2,6 +2,7 @@ import { DAISIES } from "../config/daisies.js";
 import { PARKS } from "../config/parks.js";
 import { loadSettings, saveSettings } from "../systems/StorageSystem.js";
 import { getLocalPlayer, startSession } from "../data/api.js";
+import { audioSystem } from "../systems/AudioSystem.js";
 
 export class MenuScene extends Phaser.Scene {
   constructor() {
@@ -9,9 +10,18 @@ export class MenuScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.tileSprite(0, 0, this.scale.width, this.scale.height, "park-sky").setOrigin(0, 0).setScrollFactor(0);
-    this.add.tileSprite(0, 0, this.scale.width, this.scale.height, "park-far").setOrigin(0, 0).setScrollFactor(0).setAlpha(0.75);
-    this.add.tileSprite(0, 0, this.scale.width, this.scale.height, "park-near").setOrigin(0, 0).setScrollFactor(0);
+    audioSystem.stop();
+    [
+      { key: "park-sky", alpha: 1 },
+      { key: "park-far", alpha: 0.75 },
+      { key: "park-near", alpha: 1 }
+    ].forEach(({ key, alpha }) => {
+      this.add.image(0, 0, key)
+        .setOrigin(0, 0)
+        .setDisplaySize(this.scale.width, this.scale.height)
+        .setScrollFactor(0)
+        .setAlpha(alpha);
+    });
     this.renderDom();
   }
 
@@ -25,10 +35,13 @@ export class MenuScene extends Phaser.Scene {
     const start = document.querySelector("#start-game");
     const daisyCards = document.querySelector("#daisy-cards");
     const parkCards = document.querySelector("#park-cards");
+    const heroName = document.querySelector("#menu-hero-name");
 
     menu.classList.add("is-active");
     score.classList.remove("is-active");
     hud.classList.remove("is-active");
+    document.querySelector("#pause-overlay").classList.remove("is-active");
+    document.querySelector("#pause-toggle").classList.remove("is-active");
     nameInput.value = settings.playerName || "";
 
     let selectedDaisy = settings.daisyId;
@@ -37,6 +50,8 @@ export class MenuScene extends Phaser.Scene {
     const paintSelections = () => {
       document.querySelectorAll("[data-daisy-id]").forEach((card) => card.classList.toggle("is-selected", card.dataset.daisyId === selectedDaisy));
       document.querySelectorAll("[data-park-id]").forEach((card) => card.classList.toggle("is-selected", card.dataset.parkId === selectedPark));
+      heroName.textContent = DAISIES.find((daisy) => daisy.id === selectedDaisy)?.name || "Daisy";
+      menu.dataset.daisy = selectedDaisy;
     };
 
     daisyCards.innerHTML = DAISIES.map((daisy) => `

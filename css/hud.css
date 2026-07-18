@@ -4,7 +4,7 @@
   left: 50%;
   z-index: 3;
   display: none;
-  grid-template-columns: repeat(4, minmax(74px, auto));
+  grid-template-columns: repeat(5, minmax(74px, auto));
   gap: 8px;
   transform: translateX(-50%);
 }
@@ -39,6 +39,19 @@
 
 .stamina-wrap {
   width: 150px;
+}
+
+.player-chip {
+  max-width: 160px;
+}
+
+.player-chip strong {
+  display: block;
+  overflow: hidden;
+  max-width: 135px;
+  font-size: 17px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 meter {

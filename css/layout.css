@@ -1,9 +1,13 @@
 #app-shell {
   position: relative;
-  width: 100vw;
-  height: 100dvh;
+  width: min(100vw, 1280px, calc(100dvh * 16 / 9));
+  height: min(100dvh, 720px, calc(100vw * 9 / 16));
+  margin: auto;
   overflow: hidden;
   isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: clamp(0px, 1.2vw, 14px);
+  box-shadow: 0 28px 80px rgba(17, 29, 25, 0.36);
 }
 
 #game,
@@ -37,6 +41,17 @@
 .screen-panel.is-active {
   display: block;
   animation: panel-in 280ms ease both;
+}
+
+@media (orientation: portrait) and (max-width: 720px) {
+  #app-shell {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    border: 0;
+    border-radius: 0;
+  }
 }
 
 @keyframes panel-in {

@@ -6,8 +6,6 @@ export class DaisyController {
     this.variant = variant;
     this.stamina = 1;
     this.stopTimer = 0;
-    this.carrying = false;
-    this.carriedBall = null;
     this.jumpHeight = 0;
     this.jumpVelocity = 0;
     this.actionState = null;
@@ -15,8 +13,9 @@ export class DaisyController {
     this.direction = "se";
     this.directionAngle = Math.PI / 4;
     this.motionState = "idle";
-    this.shadow = scene.add.ellipse(460, GAME.world.groundY + 104, 82, 19, 0x102416, 0.28).setDepth(18);
-    this.sprite = scene.physics.add.sprite(460, GAME.world.groundY + 68, "daisy", "run-se-0.png");
+    this.idleSeconds = 0;
+    this.shadow = scene.add.ellipse(GAME.world.startX, GAME.world.startY + 36, 82, 19, 0x102416, 0.28).setDepth(18);
+    this.sprite = scene.physics.add.sprite(GAME.world.startX, GAME.world.startY, "daisy", "run-se-0.png");
     this.sprite.setDepth(20);
     this.sprite.setDisplaySize(GAME.render.daisyWidth, GAME.render.daisyHeight);
     this.sprite.body.setSize(82, 52).setOffset(54, 120);
@@ -73,8 +72,9 @@ export class DaisyController {
     this.sprite.setDepth(20 + Math.floor(this.sprite.y / 12));
     this.updateShadow();
     this.updateDirection(input, moving);
+    const fullyIdle = !moving && this.sprite.body.speed < GAME.daisy.idleSpeedThreshold && !this.actionState && this.jumpHeight === 0;
+    this.idleSeconds = fullyIdle ? this.idleSeconds + dt : 0;
     this.playMotionAnimation(moving);
-    this.updateCarriedBall();
   }
 
   updateJump(dt) {
@@ -141,15 +141,21 @@ export class DaisyController {
       return;
     }
 
+    if (this.idleSeconds >= GAME.daisy.idleSitDelaySeconds) {
+      this.motionState = "sit";
+      this.sprite.setFlipX(false).stop().setFrame("run-s-0.png");
+      return;
+    }
+
     let locomotion = "walk";
     if (this.sprite.body.speed > GAME.daisy.sprintThreshold) locomotion = "sprint";
     else if (this.sprite.body.speed > GAME.daisy.runThreshold) locomotion = "run";
     if (!moving && this.sprite.body.speed < GAME.daisy.idleSpeedThreshold) {
-      this.motionState = this.carrying ? "carry-return" : "idle";
+      this.motionState = "idle";
       this.sprite.stop().setFrame(`run-${authored}-0.png`);
       return;
     }
-    this.motionState = this.carrying ? "carry-return" : locomotion;
+    this.motionState = locomotion;
     this.sprite.play(`daisy-${locomotion}-${authored}`, true);
   }
 
@@ -163,22 +169,20 @@ export class DaisyController {
     this.actionUntil = durationMs ? this.scene.time.now + durationMs : 0;
   }
 
-  updateCarriedBall() {
-    if (!this.carriedBall?.active) return;
-    const horizontal = this.sprite.flipX ? -1 : 1;
-    this.carriedBall.setPosition(this.sprite.x + horizontal * 31, this.sprite.y - 20);
-    this.carriedBall.setDepth(this.sprite.depth + 1);
-  }
-
   tryCatch(ball) {
     const data = ball.flightData;
     if (!ball.active || !data || data.caught) return false;
     const groundY = data.baseY ?? ball.y;
-    const distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y + this.jumpHeight + 20, ball.x, groundY);
-    const catchableHeight = data.height > -185;
-    const airborneBonus = catchableHeight ? 28 : -30;
-    const focusBonus = Phaser.Math.Linear(-8, 12, this.variant.stats.focus);
-    if (distance < GAME.daisy.catchRadius + airborneBonus + focusBonus) {
+    const pouncing = this.jumpHeight > 8 || this.actionState === "jump-pounce";
+    const focusAdjustment = Phaser.Math.Linear(-GAME.daisy.catchFocusAdjustment, GAME.daisy.catchFocusAdjustment, this.variant.stats.focus);
+    const radiusX = (pouncing ? GAME.daisy.pounceRadiusX : GAME.daisy.catchRadiusX) + focusAdjustment;
+    const radiusY = (pouncing ? GAME.daisy.pounceRadiusY : GAME.daisy.catchRadiusY) + focusAdjustment * 0.6;
+    const maxHeight = pouncing ? GAME.daisy.pounceCatchMaxHeight : GAME.daisy.groundCatchMaxHeight;
+    const dx = ball.x - this.sprite.x;
+    const dy = ball.y - (this.sprite.y + 18);
+    const insideCatchZone = (dx * dx) / (radiusX * radiusX) + (dy * dy) / (radiusY * radiusY) <= 1;
+    const catchableHeight = data.height >= -maxHeight;
+    if (insideCatchZone && catchableHeight) {
       const catchX = ball.x;
       data.caught = true;
       data.shadow.destroy();
@@ -186,16 +190,7 @@ export class DaisyController {
       this.scene.showCatchFeedback?.(catchX, groundY);
       this.setActionState("ball-pickup", GAME.daisy.catchAnimationMs);
       this.scene.time.delayedCall(GAME.daisy.catchAnimationMs, () => {
-        this.carrying = true;
-        this.carriedBall?.destroy();
-        this.carriedBall = this.scene.add.sprite(this.sprite.x, this.sprite.y, "tennis-ball").setDisplaySize(24, 24);
-        this.setActionState("carry-return", GAME.daisy.returnAnimationMs);
-        this.scene.time.delayedCall(GAME.daisy.returnAnimationMs, () => {
-          this.carrying = false;
-          this.carriedBall?.destroy();
-          this.carriedBall = null;
-          this.setActionState("landing-recovery", GAME.daisy.landingRecoveryMs);
-        });
+        this.setActionState("landing-recovery", GAME.daisy.landingRecoveryMs);
       });
       return true;
     }

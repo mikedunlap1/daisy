@@ -1,10 +1,18 @@
 export const GAME = {
   world: {
-    width: 3600,
-    height: 900,
+    width: 2592,
+    height: 864,
     groundY: 610,
     floorMinY: 590,
-    floorMaxY: 790
+    floorMaxY: 790,
+    startX: 2450,
+    startY: 678
+  },
+  viewport: {
+    aspectRatio: 16 / 9,
+    desktopMaxWidth: 1280,
+    desktopMaxHeight: 720,
+    frameGutter: 24
   },
   daisy: {
     baseSpeed: 385,
@@ -12,8 +20,13 @@ export const GAME = {
     turnDrag: 0.91,
     idleDrag: 0.9,
     sprintThreshold: 260,
-    catchRadius: 104,
-    pounceRadius: 84,
+    catchRadiusX: 46,
+    catchRadiusY: 32,
+    pounceRadiusX: 70,
+    pounceRadiusY: 48,
+    groundCatchMaxHeight: 68,
+    pounceCatchMaxHeight: 190,
+    catchFocusAdjustment: 4,
     staminaDrainMove: 0.045,
     staminaDrainSprint: 0.085,
     staminaRecovery: 0.12,
@@ -27,7 +40,8 @@ export const GAME = {
     landingRecoveryMs: 140,
     idleSpeedThreshold: 35,
     runThreshold: 120,
-    directionHysteresisDegrees: 14
+    directionHysteresisDegrees: 14,
+    idleSitDelaySeconds: 4
   },
   ball: {
     gravity: 1180,
@@ -62,7 +76,8 @@ export const GAME = {
     leadX: 170,
     leadY: 36,
     zoomFast: 1.0,
-    zoomNormal: 1.04
+    zoomNormal: 1.04,
+    startSide: "right"
   },
   controls: {
     touchStickRadius: 55,
@@ -71,7 +86,15 @@ export const GAME = {
   render: {
     daisyWidth: 124,
     daisyHeight: 134,
-    ballSize: 52
+    ballSize: 38,
+    ballMinScale: 0.82,
+    ballMaxScale: 1.08,
+    ballHeightScale: 1050,
+    ballImpactSquashX: 0.12,
+    ballImpactSquashY: 0.18,
+    ballImpactRecovery: 0.84,
+    ballShadowWidth: 44,
+    ballShadowHeight: 13
   },
   api: {
     webhookUrl: ""
