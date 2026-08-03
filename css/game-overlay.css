@@ -190,7 +190,7 @@
 .report-card {
   position: absolute;
   right: clamp(110px, 14vw, 180px);
-  bottom: clamp(16px, 3vw, 38px);
+  bottom: clamp(92px, 13vw, 150px);
   z-index: 3;
   width: clamp(210px, 25vw, 300px);
   padding: clamp(10px, 1.4vw, 16px);
@@ -215,10 +215,10 @@
 .report-daisy {
   position: absolute;
   left: 50%;
-  bottom: -12px;
-  width: 84px;
-  height: 84px;
-  background: url("../assets/daisies/daisy-directional.png") left top / 400% 400% no-repeat;
+  bottom: -18px;
+  width: 116px;
+  height: 116px;
+  background: url("../assets/daisies/daisy-directional.png") 40% 50% / 600% 500% no-repeat;
   transform: translateX(-50%);
   filter: drop-shadow(0 6px 5px rgba(0,0,0,.35));
 }
@@ -322,7 +322,7 @@
 
   .report-card {
     right: 12px;
-    bottom: 12px;
+    bottom: 72px;
     width: min(42%, 220px);
     padding: 9px;
   }
@@ -355,25 +355,4 @@
   .report-card__image { display: block; height: 120px; }
   .report-card__label, .report-stats { display: grid; }
   #score-line { max-height: none; }
-}
-.jump-button {
-  position: absolute;
-  right: max(24px, env(safe-area-inset-right));
-  bottom: max(72px, calc(env(safe-area-inset-bottom) + 58px));
-  z-index: 40;
-  width: 86px;
-  height: 86px;
-  border: 2px solid rgba(255,255,255,.72);
-  border-radius: 50%;
-  color: #173014;
-  background: rgba(189,232,65,.88);
-  font-weight: 900;
-  text-transform: uppercase;
-  touch-action: none;
-  user-select: none;
-}
-
-.screen-panel.is-active ~ .jump-button,
-.score-panel.is-active ~ .jump-button {
-  display: none;
 }

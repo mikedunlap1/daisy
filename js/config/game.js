@@ -51,17 +51,17 @@ export const GAME = {
     maxLaunchVelocityX: 720,
     minLaunchVelocityY: -760,
     maxLaunchVelocityY: -520,
-    bounceDamping: 0.54,
-    bounceHorizontalDamping: 0.76,
-    rollDrag: 0.978,
-    stopSpeed: 28,
-    spinDecay: 0.965,
-    lifeSeconds: 8.5
+    bounceDamping: 0.68,
+    bounceHorizontalDamping: 0.9,
+    rollDrag: 0.992,
+    stopSpeed: 14,
+    spinDecay: 0.982,
+    lifeSeconds: 13
   },
   throws: {
     firstDelay: 650,
     waveDelay: 1050,
-    maxActiveBalls: 1,
+    maxActiveBalls: 2,
     chuckitVisibleMs: 1100
   },
   levels: {

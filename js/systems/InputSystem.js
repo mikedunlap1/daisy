@@ -102,13 +102,6 @@ export class InputSystem {
     scene.input.on("gameout", () => this.resetTouch());
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.destroy());
 
-    this.jumpButton = document.querySelector("#jump-button");
-    this.onJumpPointerDown = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      this.touchJumpQueued = true;
-    };
-    this.jumpButton?.addEventListener("pointerdown", this.onJumpPointerDown);
   }
 
   resetTouch({ preserveTapTarget = false } = {}) {
@@ -126,7 +119,6 @@ export class InputSystem {
     this.scene.input.off("pointerup", this.onPointerUp);
     this.scene.input.off("pointerupoutside", this.onPointerUp);
     this.resetTouch();
-    this.jumpButton?.removeEventListener("pointerdown", this.onJumpPointerDown);
     this.scene.game.canvas.removeEventListener("pointerdown", this.onCanvasPointerDown);
     window.removeEventListener("keydown", this.onKeyDown);
     window.removeEventListener("keyup", this.onKeyUp);

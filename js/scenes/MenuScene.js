@@ -34,9 +34,6 @@ export class MenuScene extends Phaser.Scene {
     const nameInput = document.querySelector("#player-name");
     const start = document.querySelector("#start-game");
     const daisyCards = document.querySelector("#daisy-cards");
-    const parkCards = document.querySelector("#park-cards");
-    const heroName = document.querySelector("#menu-hero-name");
-
     menu.classList.add("is-active");
     score.classList.remove("is-active");
     hud.classList.remove("is-active");
@@ -44,13 +41,11 @@ export class MenuScene extends Phaser.Scene {
     document.querySelector("#pause-toggle").classList.remove("is-active");
     nameInput.value = settings.playerName || "";
 
-    let selectedDaisy = settings.daisyId;
-    let selectedPark = settings.parkId;
+    let selectedDaisy = DAISIES.some((daisy) => daisy.id === settings.daisyId) ? settings.daisyId : DAISIES[0].id;
+    let selectedPark = PARKS.some((park) => park.id === settings.parkId) ? settings.parkId : PARKS[0].id;
 
     const paintSelections = () => {
       document.querySelectorAll("[data-daisy-id]").forEach((card) => card.classList.toggle("is-selected", card.dataset.daisyId === selectedDaisy));
-      document.querySelectorAll("[data-park-id]").forEach((card) => card.classList.toggle("is-selected", card.dataset.parkId === selectedPark));
-      heroName.textContent = DAISIES.find((daisy) => daisy.id === selectedDaisy)?.name || "Daisy";
       menu.dataset.daisy = selectedDaisy;
     };
 
@@ -67,25 +62,10 @@ export class MenuScene extends Phaser.Scene {
       </button>
     `).join("");
 
-    parkCards.innerHTML = PARKS.map((park) => `
-      <button class="select-card" type="button" data-park-id="${park.id}">
-        <span class="park-thumb" style="--park-preview:${park.previewColor}"></span>
-        <h3>${park.name}</h3>
-        <p>${park.blurb}</p>
-      </button>
-    `).join("");
-
     daisyCards.onclick = (event) => {
       const card = event.target.closest("[data-daisy-id]");
       if (!card) return;
       selectedDaisy = card.dataset.daisyId;
-      paintSelections();
-    };
-
-    parkCards.onclick = (event) => {
-      const card = event.target.closest("[data-park-id]");
-      if (!card) return;
-      selectedPark = card.dataset.parkId;
       paintSelections();
     };
 

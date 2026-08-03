@@ -186,6 +186,7 @@ export class DaisyController {
       const catchX = ball.x;
       data.caught = true;
       data.shadow.destroy();
+      data.glow?.destroy();
       ball.destroy();
       this.scene.showCatchFeedback?.(catchX, groundY);
       this.setActionState("ball-pickup", GAME.daisy.catchAnimationMs);

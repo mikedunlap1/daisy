@@ -1,10 +1,10 @@
 import { DAISIES } from "../config/daisies.js";
 import { PARKS } from "../config/parks.js";
 import { GAME } from "../config/game.js";
-import { InputSystem } from "../systems/InputSystem.js?v=20260718-2";
+import { InputSystem } from "../systems/InputSystem.js?v=20260802-5";
 import { ParallaxSystem } from "../systems/ParallaxSystem.js?v=20260718-2";
-import { BallPhysicsSystem } from "../systems/BallPhysicsSystem.js?v=20260718-6";
-import { DaisyController } from "../systems/DaisyController.js?v=20260718-5";
+import { BallPhysicsSystem } from "../systems/BallPhysicsSystem.js?v=20260802-5";
+import { DaisyController } from "../systems/DaisyController.js?v=20260802-3";
 import { ThrowSystem } from "../systems/ThrowSystem.js?v=20260718-4";
 import { CameraSystem } from "../systems/CameraSystem.js?v=20260718-1";
 import { ScoreSystem } from "../systems/ScoreSystem.js";
@@ -117,8 +117,6 @@ export class PlayScene extends Phaser.Scene {
   createLighting() {
     const haze = this.add.rectangle(0, 0, GAME.world.width, GAME.world.height, this.park.ambientTint, 0.14).setOrigin(0, 0).setDepth(80);
     haze.setBlendMode(Phaser.BlendModes.SCREEN);
-    const sun = this.add.ellipse(320, 120, 380, 180, 0xffe5aa, 0.18).setDepth(-10).setScrollFactor(0.05);
-    sun.setBlendMode(Phaser.BlendModes.SCREEN);
   }
 
   update(time, delta) {
