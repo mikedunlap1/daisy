@@ -34,7 +34,6 @@ export class MenuScene extends Phaser.Scene {
     const nameInput = document.querySelector("#player-name");
     const start = document.querySelector("#start-game");
     const daisyCards = document.querySelector("#daisy-cards");
-    const parkCards = document.querySelector("#park-cards");
     menu.classList.add("is-active");
     score.classList.remove("is-active");
     hud.classList.remove("is-active");
@@ -47,7 +46,6 @@ export class MenuScene extends Phaser.Scene {
 
     const paintSelections = () => {
       document.querySelectorAll("[data-daisy-id]").forEach((card) => card.classList.toggle("is-selected", card.dataset.daisyId === selectedDaisy));
-      document.querySelectorAll("[data-park-id]").forEach((card) => card.classList.toggle("is-selected", card.dataset.parkId === selectedPark));
       menu.dataset.daisy = selectedDaisy;
     };
 
@@ -64,25 +62,10 @@ export class MenuScene extends Phaser.Scene {
       </button>
     `).join("");
 
-    parkCards.innerHTML = PARKS.map((park) => `
-      <button class="select-card" type="button" data-park-id="${park.id}">
-        <span class="park-thumb" style="--park-preview:${park.previewColor}"></span>
-        <h3>${park.name}</h3>
-        <p>${park.blurb}</p>
-      </button>
-    `).join("");
-
     daisyCards.onclick = (event) => {
       const card = event.target.closest("[data-daisy-id]");
       if (!card) return;
       selectedDaisy = card.dataset.daisyId;
-      paintSelections();
-    };
-
-    parkCards.onclick = (event) => {
-      const card = event.target.closest("[data-park-id]");
-      if (!card) return;
-      selectedPark = card.dataset.parkId;
       paintSelections();
     };
 

@@ -215,10 +215,10 @@
 .report-daisy {
   position: absolute;
   left: 50%;
-  bottom: -12px;
-  width: 84px;
-  height: 84px;
-  background: url("../assets/daisies/daisy-directional.png") left top / 400% 400% no-repeat;
+  bottom: -18px;
+  width: 116px;
+  height: 116px;
+  background: url("../assets/daisies/daisy-directional.png") 40% 50% / 600% 500% no-repeat;
   transform: translateX(-50%);
   filter: drop-shadow(0 6px 5px rgba(0,0,0,.35));
 }
