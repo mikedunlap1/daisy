@@ -35,8 +35,6 @@ export class MenuScene extends Phaser.Scene {
     const start = document.querySelector("#start-game");
     const daisyCards = document.querySelector("#daisy-cards");
     const parkCards = document.querySelector("#park-cards");
-    const heroName = document.querySelector("#menu-hero-name");
-
     menu.classList.add("is-active");
     score.classList.remove("is-active");
     hud.classList.remove("is-active");
@@ -44,13 +42,12 @@ export class MenuScene extends Phaser.Scene {
     document.querySelector("#pause-toggle").classList.remove("is-active");
     nameInput.value = settings.playerName || "";
 
-    let selectedDaisy = settings.daisyId;
-    let selectedPark = settings.parkId;
+    let selectedDaisy = DAISIES.some((daisy) => daisy.id === settings.daisyId) ? settings.daisyId : DAISIES[0].id;
+    let selectedPark = PARKS.some((park) => park.id === settings.parkId) ? settings.parkId : PARKS[0].id;
 
     const paintSelections = () => {
       document.querySelectorAll("[data-daisy-id]").forEach((card) => card.classList.toggle("is-selected", card.dataset.daisyId === selectedDaisy));
       document.querySelectorAll("[data-park-id]").forEach((card) => card.classList.toggle("is-selected", card.dataset.parkId === selectedPark));
-      heroName.textContent = DAISIES.find((daisy) => daisy.id === selectedDaisy)?.name || "Daisy";
       menu.dataset.daisy = selectedDaisy;
     };
 
