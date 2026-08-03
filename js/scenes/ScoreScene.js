@@ -34,7 +34,11 @@ export class ScoreScene extends Phaser.Scene {
     panel.classList.add("is-active");
     playAgain.onclick = () => {
       panel.classList.remove("is-active");
-      this.scene.start("MenuScene");
+      this.scene.start("PlayScene", {
+        player: this.score.player,
+        daisyId: this.score.daisyId,
+        parkId: this.score.parkId
+      });
     };
   }
 

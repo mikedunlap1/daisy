@@ -18,7 +18,7 @@ export class BallPhysicsSystem {
     const ball = this.scene.physics.add.sprite(x, y, "tennis-ball").setDepth(9);
     ball.setDisplaySize(GAME.render.ballSize, GAME.render.ballSize);
     ball.body.setAllowGravity(false);
-    const glow = this.scene.add.ellipse(x, y, GAME.render.ballSize * 1.75, GAME.render.ballSize * 1.75, 0xd8ff55, 0)
+    const glow = this.scene.add.ellipse(x, y, GAME.render.ballSize * 2.35, GAME.render.ballSize * 2.35, 0xd8ff55, 0)
       .setDepth(8.5);
     glow.setBlendMode(Phaser.BlendModes.SCREEN);
     const collisionDiameter = ball.width * 0.72;
@@ -70,7 +70,7 @@ export class BallPhysicsSystem {
 
       data.spin *= GAME.ball.spinDecay;
       data.impact *= GAME.render.ballImpactRecovery;
-      ball.rotation += data.spin * dt;
+      ball.rotation = 0;
       data.baseY = Phaser.Math.Clamp(data.baseY, GAME.world.floorMinY - 20, GAME.world.floorMaxY + 20);
       ball.y = data.baseY + data.height * 0.22;
       const heightScale = Phaser.Math.Clamp(
@@ -91,12 +91,12 @@ export class BallPhysicsSystem {
       data.shadow.alpha = Phaser.Math.Clamp(0.28 - Math.abs(data.height) / 1600, 0.08, 0.28);
       data.glow.x = ball.x;
       data.glow.y = ball.y;
-      const ageWarning = Phaser.Math.Clamp((data.age - (GAME.ball.lifeSeconds - 2.4)) / 2.4, 0, 1);
-      const rollWarning = rolling ? Phaser.Math.Clamp((GAME.ball.stopSpeed * 2.2 - ball.body.speed) / (GAME.ball.stopSpeed * 2.2), 0, 1) : 0;
+      const ageWarning = Phaser.Math.Clamp((data.age - (GAME.ball.lifeSeconds - 4.2)) / 4.2, 0, 1);
+      const rollWarning = rolling ? Phaser.Math.Clamp((GAME.ball.stopSpeed * 3.8 - ball.body.speed) / (GAME.ball.stopSpeed * 3.8), 0, 1) : 0;
       const warning = Math.max(ageWarning, rollWarning);
       const pulse = 0.55 + Math.sin(data.age * 12) * 0.45;
-      data.glow.alpha = warning * (0.08 + pulse * 0.1);
-      data.glow.scale = heightScale * (1 + warning * (0.18 + pulse * 0.14));
+      data.glow.alpha = warning * (0.16 + pulse * 0.24);
+      data.glow.scale = heightScale * (1 + warning * (0.28 + pulse * 0.24));
 
       if (data.age > GAME.ball.lifeSeconds || (rolling && ball.body.speed < GAME.ball.stopSpeed)) {
         this.scene.scoreSystem?.miss();

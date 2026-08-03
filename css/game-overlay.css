@@ -3,7 +3,7 @@
   left: max(18px, env(safe-area-inset-left));
   bottom: max(18px, env(safe-area-inset-bottom));
   z-index: 4;
-  display: none;
+  display: none !important;
   width: 112px;
   height: 112px;
   border: 1px solid rgba(255, 255, 255, 0.38);
@@ -15,7 +15,7 @@
 }
 
 .touch-stick.is-active {
-  display: block;
+  display: none !important;
 }
 
 .touch-stick__nub {
@@ -190,7 +190,7 @@
 .report-card {
   position: absolute;
   right: clamp(110px, 14vw, 180px);
-  bottom: clamp(16px, 3vw, 38px);
+  bottom: clamp(92px, 13vw, 150px);
   z-index: 3;
   width: clamp(210px, 25vw, 300px);
   padding: clamp(10px, 1.4vw, 16px);
@@ -322,7 +322,7 @@
 
   .report-card {
     right: 12px;
-    bottom: 12px;
+    bottom: 72px;
     width: min(42%, 220px);
     padding: 9px;
   }
