@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./css/base.css?v=20260718-2">
     <link rel="stylesheet" href="./css/layout.css?v=20260718-2">
     <link rel="stylesheet" href="./css/cards.css?v=20260802-2">
-    <link rel="stylesheet" href="./css/menu.css?v=20260802-2">
+    <link rel="stylesheet" href="./css/menu.css?v=20260802-3">
     <link rel="stylesheet" href="./css/hud.css?v=20260718-1">
     <link rel="stylesheet" href="./css/game-overlay.css?v=20260802-2">
   </head>
@@ -33,6 +33,10 @@
               <span>Your name</span>
               <input id="player-name" type="text" autocomplete="nickname" maxlength="28" placeholder="Big Hoss">
             </label>
+            <div class="location-chip" aria-label="Selected location">
+              <span>Location</span>
+              <strong>Mom and Dad's Backyard</strong>
+            </div>
 
             <div class="picker-block">
               <div class="picker-heading">
@@ -68,7 +72,7 @@
             <div class="score-big"><span id="final-score">0</span><small>catches</small></div>
             <dl class="report-stats">
               <div><dt>Best streak</dt><dd id="report-streak">0</dd></div>
-              <div><dt>Location</dt><dd>Backyard 171</dd></div>
+              <div><dt>Location</dt><dd>Mom and Dad's Backyard</dd></div>
             </dl>
             <p id="score-line">Daisy is considering whether this was worth getting up for.</p>
             <button id="play-again" class="report-action" type="button">Throw More <span aria-hidden="true">&#8599;</span></button>
@@ -107,6 +111,6 @@
         document.write('<script src="./js/vendor/phaser.min.js"><\/script>');
       }
     </script>
-    <script type="module" src="./js/main.js?v=20260802-2"></script>
+    <script type="module" src="./js/main.js?v=20260802-3"></script>
   </body>
 </html>

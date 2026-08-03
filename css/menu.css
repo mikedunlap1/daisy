@@ -18,9 +18,9 @@
   padding: clamp(16px, 3vw, 38px);
   overflow: hidden;
   background:
-    linear-gradient(90deg, rgba(9, 39, 59, .9), rgba(9, 39, 59, .38) 38%, rgba(9, 39, 59, .08) 68%),
+    linear-gradient(90deg, rgba(9, 39, 59, .88), rgba(9, 39, 59, .3) 36%, rgba(9, 39, 59, .02) 68%),
     linear-gradient(0deg, rgba(7, 29, 45, .62), transparent 55%),
-    url("../assets/parks/backyard/171-backyard-wide.png") 67% center / cover no-repeat;
+    url("../assets/parks/backyard/171-backyard-wide.png") 88% center / cover no-repeat;
 }
 
 .menu-topline {
@@ -101,8 +101,7 @@
   bottom: 22px;
   width: 192px;
   height: 208px;
-  background: url("../assets/daisies/daisy-pet-sheet.png") 0 0 / 1536px 1872px no-repeat;
-  filter: drop-shadow(0 22px 16px rgba(0,0,0,.38));
+  background: url("../assets/daisies/daisy-menu-clean.png") center bottom / contain no-repeat;
   transform: translateX(-50%) scale(clamp(.78, 1.25vw, 1.22));
   transform-origin: bottom center;
 }
@@ -146,6 +145,30 @@
 .name-field input::placeholder { color: rgba(255,255,255,.42); }
 .name-field input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(216,255,85,.14); }
 
+.location-chip {
+  display: grid;
+  gap: 3px;
+  margin-top: 11px;
+  padding: 9px 10px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 7px;
+  background: rgba(8, 40, 61, .34);
+}
+
+.location-chip span {
+  color: rgba(255,255,255,.56);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.location-chip strong {
+  color: white;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
 .picker-block { margin-top: 14px; }
 .picker-heading { display: flex; align-items: end; justify-content: space-between; gap: 10px; margin-bottom: 7px; }
 .picker-heading h2 { margin: 0; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
@@ -179,7 +202,7 @@
     overflow-y: visible;
     background:
       linear-gradient(180deg, rgba(8, 35, 54, .78), rgba(8, 35, 54, .34) 36%, rgba(8, 35, 54, .9) 72%),
-      url("../assets/parks/backyard/171-backyard-wide.png") 63% top / auto 38vh no-repeat,
+      url("../assets/parks/backyard/171-backyard-wide.png") 75% top / auto 38vh no-repeat,
       var(--blue-deep);
   }
   .menu-copy { position: relative; left: auto; bottom: auto; max-width: 100%; min-height: 29vh; margin-top: 0; padding-top: 14px; }
