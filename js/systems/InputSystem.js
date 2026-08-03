@@ -69,6 +69,9 @@ export class InputSystem {
       this.origin = { x: pointer.x, y: pointer.y };
       this.touchDragged = false;
       this.tapTarget = scene.cameras.main.getWorldPoint(pointer.x, pointer.y);
+      this.stick?.classList.add("is-active");
+      this.stick?.style.setProperty("left", `${Math.max(18, pointer.x - 56)}px`);
+      this.stick?.style.setProperty("bottom", `${Math.max(18, window.innerHeight - pointer.y - 56)}px`);
     };
 
     this.onPointerMove = (pointer) => {
@@ -83,6 +86,7 @@ export class InputSystem {
       }
       this.vector.set(dx / radius, dy / radius);
       if (this.vector.length() > 1) this.vector.normalize();
+      this.nub?.style.setProperty("transform", `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`);
     };
 
     this.onPointerUp = (pointer) => {
@@ -98,19 +102,14 @@ export class InputSystem {
     scene.input.on("gameout", () => this.resetTouch());
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.destroy());
 
-    this.jumpButton = document.querySelector("#jump-button");
-    this.onJumpPointerDown = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      this.touchJumpQueued = true;
-    };
-    this.jumpButton?.addEventListener("pointerdown", this.onJumpPointerDown);
   }
 
   resetTouch({ preserveTapTarget = false } = {}) {
       this.pointerId = null;
       this.vector.set(0, 0);
       if (!preserveTapTarget) this.tapTarget = null;
+      this.nub?.style.setProperty("transform", "translate(-50%, -50%)");
+      this.stick?.classList.remove("is-active");
   }
 
   destroy() {
@@ -120,7 +119,6 @@ export class InputSystem {
     this.scene.input.off("pointerup", this.onPointerUp);
     this.scene.input.off("pointerupoutside", this.onPointerUp);
     this.resetTouch();
-    this.jumpButton?.removeEventListener("pointerdown", this.onJumpPointerDown);
     this.scene.game.canvas.removeEventListener("pointerdown", this.onCanvasPointerDown);
     window.removeEventListener("keydown", this.onKeyDown);
     window.removeEventListener("keyup", this.onKeyUp);

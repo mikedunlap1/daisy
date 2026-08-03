@@ -13,7 +13,6 @@ export class BootScene extends Phaser.Scene {
 
   preload() {
     this.load.image("backyard-171-wide", "./assets/parks/backyard/171-backyard-wide.png");
-    this.load.image("tennis-ball", "./assets/props/tennis-ball-realistic.png");
     this.load.atlas("daisy", "./assets/daisies/daisy-directional.png", "./assets/daisies/daisy-directional.json");
   }
 
@@ -61,6 +60,43 @@ export class BootScene extends Phaser.Scene {
     c.arc(174, 38, 15, 0, Math.PI * 2);
     c.fill();
     this.textures.addCanvas("chuckit", chuck);
+
+    const ball = document.createElement("canvas");
+    ball.width = 96;
+    ball.height = 96;
+    const b = ball.getContext("2d");
+    const felt = b.createRadialGradient(34, 24, 8, 50, 54, 48);
+    felt.addColorStop(0, "#f5ff80");
+    felt.addColorStop(0.58, "#d8f24d");
+    felt.addColorStop(1, "#93b52b");
+    b.fillStyle = felt;
+    b.beginPath();
+    b.arc(48, 48, 39, 0, Math.PI * 2);
+    b.fill();
+    b.save();
+    b.beginPath();
+    b.arc(48, 48, 39, 0, Math.PI * 2);
+    b.clip();
+    b.strokeStyle = "rgba(255,255,220,.82)";
+    b.lineWidth = 8;
+    b.beginPath();
+    b.arc(18, 48, 38, -1.18, 1.18);
+    b.stroke();
+    b.beginPath();
+    b.arc(78, 48, 38, Math.PI - 1.18, Math.PI + 1.18);
+    b.stroke();
+    const lowerShade = b.createLinearGradient(0, 54, 0, 88);
+    lowerShade.addColorStop(0, "rgba(70,82,18,0)");
+    lowerShade.addColorStop(1, "rgba(49,62,13,.26)");
+    b.fillStyle = lowerShade;
+    b.fillRect(0, 52, 96, 44);
+    b.restore();
+    b.strokeStyle = "rgba(255,255,205,.42)";
+    b.lineWidth = 3;
+    b.beginPath();
+    b.arc(48, 48, 37, 0, Math.PI * 2);
+    b.stroke();
+    this.textures.addCanvas("tennis-ball", ball);
   }
 
   createDaisyAnimations() {
@@ -96,8 +132,6 @@ function drawParkLayer(ctx, layer, skyTop, seed, backyardImage) {
   if (backyardImage && layer === "near") {
     ctx.fillStyle = "rgba(29, 43, 23, .18)";
     ctx.fillRect(0, 610, W, H - 610);
-    ctx.fillStyle = "rgba(255, 210, 89, .14)";
-    for (let x = -120; x < W + 120; x += 180) fillEllipse(ctx, x + seed * 18, 715 + Math.sin(x) * 18, 140, 26);
     return;
   }
 

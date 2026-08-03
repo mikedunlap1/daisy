@@ -1,4 +1,4 @@
-import { BootScene } from "./scenes/BootScene.js?v=20260718-4";
+import { BootScene } from "./scenes/BootScene.js?v=20260802-5";
 import { MenuScene } from "./scenes/MenuScene.js?v=20260802-2";
 import { PlayScene } from "./scenes/PlayScene.js?v=20260802-4";
 import { ScoreScene } from "./scenes/ScoreScene.js?v=20260802-4";

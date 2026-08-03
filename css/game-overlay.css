@@ -3,7 +3,7 @@
   left: max(18px, env(safe-area-inset-left));
   bottom: max(18px, env(safe-area-inset-bottom));
   z-index: 4;
-  display: none !important;
+  display: none;
   width: 112px;
   height: 112px;
   border: 1px solid rgba(255, 255, 255, 0.38);
@@ -15,7 +15,7 @@
 }
 
 .touch-stick.is-active {
-  display: none !important;
+  display: block;
 }
 
 .touch-stick__nub {
@@ -355,25 +355,4 @@
   .report-card__image { display: block; height: 120px; }
   .report-card__label, .report-stats { display: grid; }
   #score-line { max-height: none; }
-}
-.jump-button {
-  position: absolute;
-  right: max(24px, env(safe-area-inset-right));
-  bottom: max(72px, calc(env(safe-area-inset-bottom) + 58px));
-  z-index: 40;
-  width: 86px;
-  height: 86px;
-  border: 2px solid rgba(255,255,255,.72);
-  border-radius: 50%;
-  color: #173014;
-  background: rgba(189,232,65,.88);
-  font-weight: 900;
-  text-transform: uppercase;
-  touch-action: none;
-  user-select: none;
-}
-
-.screen-panel.is-active ~ .jump-button,
-.score-panel.is-active ~ .jump-button {
-  display: none;
 }
